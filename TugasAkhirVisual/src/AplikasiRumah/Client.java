@@ -5,10 +5,10 @@
  */
 package AplikasiRumah;
 
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+//import javax.swing.*;
+//import java.awt.*;
+//import java.awt.event.ActionEvent;
+//import java.awt.event.ActionListener;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -497,7 +497,6 @@ public class Client extends javax.swing.JFrame {
 
     private void jLabel1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel1MouseClicked
         // TODO add your handling code here:
-        clear();
     }//GEN-LAST:event_jLabel1MouseClicked
 
     /**
