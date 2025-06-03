@@ -8,6 +8,7 @@ package AplikasiRumah;
 //import java.awt.*;
 //import java.awt.event.ActionEvent;
 //import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -20,6 +21,7 @@ import javax.swing.table.DefaultTableModel;
  * @author Asus
  */
 public class RAB extends javax.swing.JFrame {
+    private DefaultTableModel tbl;
 
     /**
      * Creates new form RAB
@@ -30,11 +32,8 @@ public class RAB extends javax.swing.JFrame {
     }
     
     private void tabel() {
-        DefaultTableModel tbl = new DefaultTableModel();
-        tbl.addColumn("Id RAB");
-        tbl.addColumn("Tipe");
-        tbl.addColumn("Keterangan");
-        tbl.addColumn("Harga");
+        Object[] Baris = {"Id RAB", "Tipe", "Keterangan", "Harga"};
+        tbl = new DefaultTableModel(null, Baris);
         
         try {
             Statement st = (Statement)  koneksi.getConnection().createStatement();
@@ -200,6 +199,11 @@ public class RAB extends javax.swing.JFrame {
                 return types [columnIndex];
             }
         });
+        displayArea.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                displayAreaMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(displayArea);
 
         getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 140, 500, 350));
@@ -231,7 +235,6 @@ public class RAB extends javax.swing.JFrame {
         }catch(Exception e){
             JOptionPane.showMessageDialog(null,"GAGAL");
         }
-        tabel();
     }//GEN-LAST:event_idFieldActionPerformed
 
     private void tipeFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tipeFieldActionPerformed
@@ -403,6 +406,30 @@ public class RAB extends javax.swing.JFrame {
         // TODO add your handling code here:
         clear();
     }//GEN-LAST:event_jLabel1MouseClicked
+
+    private void displayAreaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_displayAreaMouseClicked
+        // TODO add your handling code here:
+        // Get selected row
+        int selectedRow = displayArea.getSelectedRow();
+
+        // Get values from selected row
+        String id = tbl.getValueAt(selectedRow, 0).toString();
+        String tipe = tbl.getValueAt(selectedRow, 1).toString();
+        String keterangan = tbl.getValueAt(selectedRow, 2).toString();
+        String harga = tbl.getValueAt(selectedRow, 3).toString();
+
+        // Set values to form fields
+        idField.setText(id);
+        tipeField.setText(tipe);
+        keteranganField.setText(keterangan);
+        hargaField.setText(harga);
+        }
+
+        private void txtcariKeyPressed(java.awt.event.KeyEvent evt) {
+            if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+                tabel();
+            }
+    }//GEN-LAST:event_displayAreaMouseClicked
 
     /**
      * @param args the command line arguments
