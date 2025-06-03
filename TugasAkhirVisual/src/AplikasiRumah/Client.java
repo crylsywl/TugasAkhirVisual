@@ -9,6 +9,7 @@ package AplikasiRumah;
 //import java.awt.*;
 //import java.awt.event.ActionEvent;
 //import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -21,6 +22,7 @@ import javax.swing.table.DefaultTableModel;
  * @author Asus
  */
 public class Client extends javax.swing.JFrame {
+    private DefaultTableModel tbl;
 
     /**
      * Creates new form Client
@@ -31,15 +33,17 @@ public class Client extends javax.swing.JFrame {
     }
 
       private void tabel() {
-        DefaultTableModel tbl = new DefaultTableModel();
-        tbl.addColumn("Id Client");
-        tbl.addColumn("NIK");
-        tbl.addColumn("Nama Client");
-        tbl.addColumn("Nomor KK");
-        tbl.addColumn("NPWP");
-        tbl.addColumn("Asuransi");
-        tbl.addColumn("Gaji");
-        tbl.addColumn("Alamat");
+        Object[] Baris = {
+            "Id Client",
+            "NIK",
+            "Nama Client",
+            "Nomor KK",
+            "NPWP",
+            "Asuransi",
+            "Gaji",
+            "Alamat"
+        };
+        tbl = new DefaultTableModel(null, Baris);
         
         try {
             Statement st = (Statement)  koneksi.getConnection().createStatement();
@@ -226,6 +230,11 @@ public class Client extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        displayArea.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                displayAreaMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(displayArea);
 
         getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(62, 340, 780, 150));
@@ -498,6 +507,38 @@ public class Client extends javax.swing.JFrame {
     private void jLabel1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel1MouseClicked
         // TODO add your handling code here:
     }//GEN-LAST:event_jLabel1MouseClicked
+
+    private void displayAreaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_displayAreaMouseClicked
+        // TODO add your handling code here:
+        // Get selected row
+        int selectedRow = displayArea.getSelectedRow();
+
+        // Get values from selected row
+        String id = tbl.getValueAt(selectedRow, 0).toString();
+        String nama = tbl.getValueAt(selectedRow, 2).toString();
+        String nik = tbl.getValueAt(selectedRow, 1).toString();
+        String nokk = tbl.getValueAt(selectedRow, 3).toString();
+        String npwp = tbl.getValueAt(selectedRow, 4).toString();
+        String asuransi = tbl.getValueAt(selectedRow, 5).toString();
+        String gaji = tbl.getValueAt(selectedRow, 6).toString();
+        String alamat = tbl.getValueAt(selectedRow, 7).toString();
+
+        // Set values to form fields
+        idField.setText(id);
+        namaField.setText(nama);
+        nikField.setText(nik);
+        nokkField.setText(nokk);
+        npwpField.setText(npwp);
+        asuransiField.setText(asuransi);
+        gajiField.setText(gaji);
+        alamatField.setText(alamat);
+        }
+
+        private void txtcariKeyPressed(java.awt.event.KeyEvent evt) {
+            if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+                tabel();
+            }
+    }//GEN-LAST:event_displayAreaMouseClicked
 
     /**
      * @param args the command line arguments

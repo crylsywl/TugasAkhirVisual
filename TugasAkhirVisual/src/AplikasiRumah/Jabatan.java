@@ -9,6 +9,7 @@ package AplikasiRumah;
 //import java.awt.*;
 //import java.awt.event.ActionEvent;
 //import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -21,6 +22,7 @@ import javax.swing.table.DefaultTableModel;
  * @author Asus
  */
 public class Jabatan extends javax.swing.JFrame {
+    private DefaultTableModel tbl;
 
     /**
      * Creates new form Jabatan
@@ -31,10 +33,9 @@ public class Jabatan extends javax.swing.JFrame {
     }
     
     public void tabel(){
-        DefaultTableModel tbl = new DefaultTableModel();
-        tbl.addColumn("Id Jabatan");
-        tbl.addColumn("Jabatan");
-        tbl.addColumn("Gaji Pokok");
+        Object[] Baris = {"Id Jabatan", "Jabatan", "Gaji Pokok"};
+        tbl = new DefaultTableModel(null, Baris);
+        
         
         try {
             Statement st = (Statement)  koneksi.getConnection().createStatement();
@@ -189,6 +190,11 @@ public class Jabatan extends javax.swing.JFrame {
 
             public Class getColumnClass(int columnIndex) {
                 return types [columnIndex];
+            }
+        });
+        displayArea.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                displayAreaMouseClicked(evt);
             }
         });
         jScrollPane1.setViewportView(displayArea);
@@ -356,7 +362,6 @@ public class Jabatan extends javax.swing.JFrame {
        }catch(Exception e){
             JOptionPane.showMessageDialog(null,"GAGAL");
         }
-        tabel();
     }//GEN-LAST:event_idFieldActionPerformed
 
     private void jLabel1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel1MouseClicked
@@ -391,6 +396,28 @@ public class Jabatan extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Koneksi Database Gagal" + e.getMessage());
         }
     }//GEN-LAST:event_searchFieldActionPerformed
+
+    private void displayAreaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_displayAreaMouseClicked
+        // TODO add your handling code here:
+        // Get selected row
+        int selectedRow = displayArea.getSelectedRow();
+
+        // Get values from selected row
+        String id = tbl.getValueAt(selectedRow, 0).toString();
+        String jabatan = tbl.getValueAt(selectedRow, 1).toString();
+        String gaji = tbl.getValueAt(selectedRow, 2).toString();
+
+        // Set values to form fields
+        idField.setText(id);
+        jabatanField.setText(jabatan);
+        gajiField.setText(gaji);
+        }
+
+        private void txtcariKeyPressed(java.awt.event.KeyEvent evt) {
+            if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+                tabel();
+            }
+    }//GEN-LAST:event_displayAreaMouseClicked
 
     /**
      * @param args the command line arguments

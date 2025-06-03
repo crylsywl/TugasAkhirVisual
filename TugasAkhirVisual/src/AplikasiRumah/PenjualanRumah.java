@@ -9,10 +9,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Timestamp;
-import java.util.Date;
 import javax.swing.JOptionPane;
 import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.Locale;
 
 /**
@@ -20,6 +19,9 @@ import java.util.Locale;
  * @author Asus
  */
 public class PenjualanRumah extends javax.swing.JFrame {
+    public String nik, client, kk, npwp, asuransi, gaji, alamat;
+    public String idkaryawan, namaKaryawan;
+    public String tipe, lb, lt, kt, km, lantai, listrik, air, desk, harga;
 
     /**
      * Creates new form PenjualanRumah
@@ -27,6 +29,46 @@ public class PenjualanRumah extends javax.swing.JFrame {
     public PenjualanRumah() {
         initComponents();
         aktif();
+    }
+    
+    public void itemTerpilihclient(){ 
+        Popupdataclient cli = new Popupdataclient(); 
+        cli.client= this;  
+        nikLabel.setText(nik);
+        clientLabel.setText(client);
+        kkLabel.setText(kk);
+        npwpLabel.setText(npwp);
+        asuransiLabel.setText(asuransi);
+        gajiLabel.setText(gaji);
+        alamatLabel.setText(alamat);
+    }
+    public void itemTerpilihrumah(){ 
+        Popupdatarumah rmh = new Popupdatarumah(); 
+        rmh.rumah= this;  
+        tipeLabel.setText(tipe);
+        luasBLabel.setText(lb);
+        luasTLabel.setText(lt);
+        kamarTLabel.setText(kt);
+        kamarMLabel.setText(km);
+        lantaiLabel.setText(lantai);
+        listrikLabel.setText(listrik);
+        airLabel.setText(air);
+        deskripsiLabel.setText(desk);
+        try {
+            long hargaLong = Long.parseLong(harga.replaceAll("[^\\d]", ""));
+            NumberFormat formatter = NumberFormat.getInstance(new Locale("id", "ID"));
+            String hargaFormatted = formatter.format(hargaLong);
+            hargaLabel.setText(hargaFormatted);
+        } catch (NumberFormatException e) {
+            hargaLabel.setText("Format salah");
+        }
+        
+    }
+    public void itemTerpilihKaryawan(){ 
+        Popupdataclient cli = new Popupdataclient(); 
+        cli.client= this;  
+        idKaryawanLabel.setText(idkaryawan);
+        namaKaryawanLabel.setText(namaKaryawan);
     }
     
 private void simpanDataTransaksi() {
@@ -97,7 +139,7 @@ private void simpanDataTransaksi() {
 }
 
     protected void aktif(){
-    cariClientField.requestFocus();
+//    cariClientField.requestFocus();
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -127,9 +169,6 @@ private void simpanDataTransaksi() {
         deskripsiLabel = new javax.swing.JLabel();
         idKaryawanLabel = new javax.swing.JLabel();
         namaKaryawanLabel = new javax.swing.JLabel();
-        cariKaryawanField = new javax.swing.JTextField();
-        cariRumahField = new javax.swing.JTextField();
-        cariClientField = new javax.swing.JTextField();
         simpanButton = new javax.swing.JLabel();
         cariKaryawanButton = new javax.swing.JLabel();
         cariRumahButton = new javax.swing.JLabel();
@@ -180,7 +219,7 @@ private void simpanDataTransaksi() {
         getContentPane().add(luasBLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(439, 202, 160, -1));
 
         tipeLabel.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        getContentPane().add(tipeLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(439, 176, 160, -1));
+        getContentPane().add(tipeLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(439, 176, 160, 20));
 
         airLabel.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         getContentPane().add(airLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(439, 350, 160, -1));
@@ -197,30 +236,6 @@ private void simpanDataTransaksi() {
         namaKaryawanLabel.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         getContentPane().add(namaKaryawanLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(720, 220, 130, -1));
 
-        cariKaryawanField.setBorder(null);
-        cariKaryawanField.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cariKaryawanFieldActionPerformed(evt);
-            }
-        });
-        getContentPane().add(cariKaryawanField, new org.netbeans.lib.awtextra.AbsoluteConstraints(659, 153, 150, -1));
-
-        cariRumahField.setBorder(null);
-        cariRumahField.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cariRumahFieldActionPerformed(evt);
-            }
-        });
-        getContentPane().add(cariRumahField, new org.netbeans.lib.awtextra.AbsoluteConstraints(376, 143, 150, -1));
-
-        cariClientField.setBorder(null);
-        cariClientField.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cariClientFieldActionPerformed(evt);
-            }
-        });
-        getContentPane().add(cariClientField, new org.netbeans.lib.awtextra.AbsoluteConstraints(76, 146, 150, -1));
-
         simpanButton.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         simpanButton.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -230,10 +245,20 @@ private void simpanDataTransaksi() {
         getContentPane().add(simpanButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 484, 220, 25));
 
         cariKaryawanButton.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        getContentPane().add(cariKaryawanButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(810, 150, 39, 25));
+        cariKaryawanButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                cariKaryawanButtonMouseClicked(evt);
+            }
+        });
+        getContentPane().add(cariKaryawanButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(649, 150, 200, 25));
 
         cariRumahButton.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        getContentPane().add(cariRumahButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 140, 39, 25));
+        cariRumahButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                cariRumahButtonMouseClicked(evt);
+            }
+        });
+        getContentPane().add(cariRumahButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(369, 140, 200, 25));
 
         cariClientButton.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         cariClientButton.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -241,7 +266,7 @@ private void simpanDataTransaksi() {
                 cariClientButtonMouseClicked(evt);
             }
         });
-        getContentPane().add(cariClientButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(229, 143, 39, 25));
+        getContentPane().add(cariClientButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(68, 143, 200, 25));
 
         back.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         back.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -266,142 +291,40 @@ private void simpanDataTransaksi() {
 
     private void cariClientButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cariClientButtonMouseClicked
         // TODO add your handling code here:
-        String namaClient = cariClientField.getText();
-        if (namaClient.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Masukkan Nama Client terlebih dahulu.");
-            return;
-        }
-
-        try (Connection connection = koneksi.getConnection()) {
-            String query = "SELECT * FROM client WHERE `Nama Client` = ?";
-            PreparedStatement preparedStatement = connection.prepareStatement(query);
-            preparedStatement.setString(1, namaClient);
-            ResultSet resultSet = preparedStatement.executeQuery();
-
-            if (resultSet.next()) {
-                // Tampilkan nama karyawan
-                nikLabel.setText(resultSet.getString("NIK"));
-                clientLabel.setText(resultSet.getString("Nama Client"));
-                kkLabel.setText(resultSet.getString("Nomor KK"));
-                npwpLabel.setText(resultSet.getString("NPWP"));
-                asuransiLabel.setText(resultSet.getString("Asuransi"));
-                gajiLabel.setText(resultSet.getString("Gaji"));
-                alamatLabel.setText(resultSet.getString("Alamat"));
-            } else {
-                JOptionPane.showMessageDialog(this, "Data karyawan tidak ditemukan.");
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Terjadi kesalahan saat mencari data karyawan: " + e.getMessage());
-        }
-        cariClientField.setText("");
+        Popupdataclient cli = new Popupdataclient();
+        cli.client = this;
+        cli.setVisible(true);
+        cli.setResizable(false);
+//        String namaClient = cariClientField.getText();
+//        if (namaClient.isEmpty()) {
+//            JOptionPane.showMessageDialog(this, "Masukkan Nama Client terlebih dahulu.");
+//            return;
+//        }
+//
+//        try (Connection connection = koneksi.getConnection()) {
+//            String query = "SELECT * FROM client WHERE `Nama Client` = ?";
+//            PreparedStatement preparedStatement = connection.prepareStatement(query);
+//            preparedStatement.setString(1, namaClient);
+//            ResultSet resultSet = preparedStatement.executeQuery();
+//
+//            if (resultSet.next()) {
+//                // Tampilkan nama karyawan
+//                nikLabel.setText(resultSet.getString("NIK"));
+//                clientLabel.setText(resultSet.getString("Nama Client"));
+//                kkLabel.setText(resultSet.getString("Nomor KK"));
+//                npwpLabel.setText(resultSet.getString("NPWP"));
+//                asuransiLabel.setText(resultSet.getString("Asuransi"));
+//                gajiLabel.setText(resultSet.getString("Gaji"));
+//                alamatLabel.setText(resultSet.getString("Alamat"));
+//            } else {
+//                JOptionPane.showMessageDialog(this, "Data karyawan tidak ditemukan.");
+//            }
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//            JOptionPane.showMessageDialog(this, "Terjadi kesalahan saat mencari data karyawan: " + e.getMessage());
+//        }
+//        cariClientField.setText("");
     }//GEN-LAST:event_cariClientButtonMouseClicked
-
-    private void cariClientFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cariClientFieldActionPerformed
-        // TODO add your handling code here:
-        String namaClient = cariClientField.getText();
-        if (namaClient.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Masukkan Nama Client terlebih dahulu.");
-            return;
-        }
-
-        try (Connection connection = koneksi.getConnection()) {
-            String query = "SELECT * FROM client WHERE `Nama Client` = ?";
-            PreparedStatement preparedStatement = connection.prepareStatement(query);
-            preparedStatement.setString(1, namaClient);
-            ResultSet resultSet = preparedStatement.executeQuery();
-
-            if (resultSet.next()) {
-                // Tampilkan nama karyawan
-                nikLabel.setText(resultSet.getString("NIK"));
-                clientLabel.setText(resultSet.getString("Nama Client"));
-                kkLabel.setText(resultSet.getString("Nomor KK"));
-                npwpLabel.setText(resultSet.getString("NPWP"));
-                asuransiLabel.setText(resultSet.getString("Asuransi"));
-                gajiLabel.setText(resultSet.getString("Gaji"));
-                alamatLabel.setText(resultSet.getString("Alamat"));
-            } else {
-                JOptionPane.showMessageDialog(this, "Data karyawan tidak ditemukan.");
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Terjadi kesalahan saat mencari data karyawan: " + e.getMessage());
-        }
-        cariClientField.setText("");
-        cariRumahField.requestFocus();
-    }//GEN-LAST:event_cariClientFieldActionPerformed
-
-    private void cariRumahFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cariRumahFieldActionPerformed
-        // TODO add your handling code here:
-        String typeRumah = cariRumahField.getText();
-    if (typeRumah.isEmpty()) {
-        JOptionPane.showMessageDialog(this, "Masukkan Tipe Rumah terlebih dahulu."); // Diubah pesan errornya
-        return;
-    }
-
-    try (Connection connection = koneksi.getConnection()) {
-        String query = "SELECT * FROM tipe_rumah WHERE `Tipe` = ?";
-        PreparedStatement preparedStatement = connection.prepareStatement(query);
-        preparedStatement.setString(1, typeRumah);
-        ResultSet resultSet = preparedStatement.executeQuery();
-
-        if (resultSet.next()) {
-            // Format harga ke dalam format IDR
-            double harga = resultSet.getDouble("Harga Rumah");
-            DecimalFormat formatIDR = (DecimalFormat) DecimalFormat.getCurrencyInstance(new Locale("id", "ID"));
-            formatIDR.setPositivePrefix(""); // Menghilangkan "Rp"
-            formatIDR.setNegativePrefix("-"); // Format untuk nilai negatif
-            String hargaFormatted = formatIDR.format(harga);
-            
-            // Set nilai ke komponen
-            tipeLabel.setText(resultSet.getString("Tipe"));
-            luasBLabel.setText(resultSet.getString("Luas Bangunan"));
-            luasTLabel.setText(resultSet.getString("Luas Tanah"));
-            kamarTLabel.setText(resultSet.getString("Kamar Tidur"));
-            kamarMLabel.setText(resultSet.getString("Kamar Mandi"));
-            lantaiLabel.setText(resultSet.getString("Lantai"));
-            listrikLabel.setText(resultSet.getString("Listrik"));
-            airLabel.setText(resultSet.getString("Sumber Air"));
-            deskripsiLabel.setText(resultSet.getString("Deskripsi"));
-            hargaLabel.setText(hargaFormatted); // Menggunakan format yang sudah dibuat
-        } else {
-            JOptionPane.showMessageDialog(this, "Data rumah tidak ditemukan."); // Diubah pesan errornya
-        }
-    } catch (SQLException e) {
-        e.printStackTrace();
-        JOptionPane.showMessageDialog(this, "Terjadi kesalahan saat mencari data rumah: " + e.getMessage()); // Diubah pesan errornya
-    }
-    cariRumahField.setText("");
-    cariKaryawanField.requestFocus();
-    }//GEN-LAST:event_cariRumahFieldActionPerformed
-
-    private void cariKaryawanFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cariKaryawanFieldActionPerformed
-        // TODO add your handling code here:
-         String namaKaryawan = cariKaryawanField.getText();
-        if (namaKaryawan.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Masukkan Nama Client terlebih dahulu.");
-            return;
-        }
-
-        try (Connection connection = koneksi.getConnection()) {
-            String query = "SELECT * FROM karyawan WHERE `Nama Karyawan` = ?";
-            PreparedStatement preparedStatement = connection.prepareStatement(query);
-            preparedStatement.setString(1, namaKaryawan);
-            ResultSet resultSet = preparedStatement.executeQuery();
-
-            if (resultSet.next()) {
-                // Tampilkan nama karyawan
-                idKaryawanLabel.setText(resultSet.getString("Id Karyawan"));
-                namaKaryawanLabel.setText(resultSet.getString("Nama Karyawan"));
-            } else {
-                JOptionPane.showMessageDialog(this, "Data karyawan tidak ditemukan.");
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Terjadi kesalahan saat mencari data karyawan: " + e.getMessage());
-        }
-        cariKaryawanField.setText("");
-    }//GEN-LAST:event_cariKaryawanFieldActionPerformed
 
     private void simpanButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_simpanButtonMouseClicked
         // TODO add your handling code here:
@@ -420,6 +343,22 @@ private void simpanDataTransaksi() {
                     simpanDataTransaksi(); // Simpan data ke database
                 }
     }//GEN-LAST:event_simpanButtonMouseClicked
+
+    private void cariKaryawanButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cariKaryawanButtonMouseClicked
+        // TODO add your handling code here:
+        Popupdatakaryawan cli = new Popupdatakaryawan();
+        cli.karyawan = this;
+        cli.setVisible(true);
+        cli.setResizable(false);
+    }//GEN-LAST:event_cariKaryawanButtonMouseClicked
+
+    private void cariRumahButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cariRumahButtonMouseClicked
+        // TODO add your handling code here:
+        Popupdatarumah rmh = new Popupdatarumah();
+        rmh.rumah = this;
+        rmh.setVisible(true);
+        rmh.setResizable(false);
+    }//GEN-LAST:event_cariRumahButtonMouseClicked
 
     /**
      * @param args the command line arguments
@@ -462,11 +401,8 @@ private void simpanDataTransaksi() {
     private javax.swing.JLabel asuransiLabel;
     private javax.swing.JLabel back;
     private javax.swing.JLabel cariClientButton;
-    private javax.swing.JTextField cariClientField;
     private javax.swing.JLabel cariKaryawanButton;
-    private javax.swing.JTextField cariKaryawanField;
     private javax.swing.JLabel cariRumahButton;
-    private javax.swing.JTextField cariRumahField;
     private javax.swing.JLabel clientLabel;
     private javax.swing.JLabel deskripsiLabel;
     private javax.swing.JLabel gajiLabel;

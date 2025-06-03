@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 package AplikasiRumah;
+import java.awt.event.KeyEvent;
 import javax.swing.*;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -17,6 +18,7 @@ import javax.swing.table.DefaultTableModel;
  * @author Asus
  */
 public class TipeRumah extends javax.swing.JFrame {
+    private DefaultTableModel tbl;
 
     /**
      * Creates new form TipeRumah
@@ -33,20 +35,23 @@ public class TipeRumah extends javax.swing.JFrame {
 
 
     private void tabel() {
-        DefaultTableModel tbl = new DefaultTableModel();
-        tbl.addColumn("Id Rumah");
-        tbl.addColumn("Tipe");
-        tbl.addColumn("Harga Pokok");
-        tbl.addColumn("Luas Bangunan");
-        tbl.addColumn("Luas Tanah");
-        tbl.addColumn("Kamar Tidur");
-        tbl.addColumn("Kamar Mandi");
-        tbl.addColumn("Lantai");
-        tbl.addColumn("Listrik");
-        tbl.addColumn("Sumber Air");
-        tbl.addColumn("Harga Rumah");
-        tbl.addColumn("Deskripsi");
-        tbl.addColumn("Total Bonus");
+        Object[] Baris = {
+            "Id Rumah",
+            "Tipe",
+            "Harga Pokok",
+            "Luas Bangunan",
+            "Luas Tanah",
+            "Kamar Tidur",
+            "Kamar Mandi",
+            "Lantai",
+            "Listrik",
+            "Sumber Air",
+            "Harga Rumah",
+            "Deskripsi",
+            "Total Bonus"
+        };
+
+        tbl = new DefaultTableModel(null, Baris);
         
         try {
         Statement st = koneksi.getConnection().createStatement();
@@ -299,6 +304,11 @@ public class TipeRumah extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        displayArea.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                displayAreaMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(displayArea);
 
         getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(62, 390, 780, 100));
@@ -398,6 +408,7 @@ public class TipeRumah extends javax.swing.JFrame {
                     }
                     JOptionPane.showMessageDialog(this, "Data berhasil ditambahkan!", "Sukses", JOptionPane.INFORMATION_MESSAGE);
                     tabel();
+                    clear();
                 } else {
                     JOptionPane.showMessageDialog(this, "Gagal menambahkan data", "Error", JOptionPane.ERROR_MESSAGE);
                 }
@@ -458,6 +469,7 @@ public class TipeRumah extends javax.swing.JFrame {
                 if (affectedRows > 0) {
                     JOptionPane.showMessageDialog(this, "Data berhasil diupdate!", "Sukses", JOptionPane.INFORMATION_MESSAGE);
                     tabel();
+                    clear();
                 } else {
                     JOptionPane.showMessageDialog(this, "Data tidak ditemukan", "Error", JOptionPane.ERROR_MESSAGE);
                 }
@@ -637,7 +649,6 @@ public class TipeRumah extends javax.swing.JFrame {
         }catch(Exception e){
             JOptionPane.showMessageDialog(null,"GAGAL");
         }
-        tabel();
     }//GEN-LAST:event_idFieldActionPerformed
 
     private void searchMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_searchMouseClicked
@@ -726,6 +737,49 @@ public class TipeRumah extends javax.swing.JFrame {
         // TODO add your handling code here:
         clear();
     }//GEN-LAST:event_jLabel1MouseClicked
+
+    private void displayAreaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_displayAreaMouseClicked
+        // TODO add your handling code here:
+        // Get selected row
+        int selectedRow = displayArea.getSelectedRow();
+
+        // Get values from selected row
+        String id = tbl.getValueAt(selectedRow, 0).toString();
+        String tipe = tbl.getValueAt(selectedRow, 1).toString();
+        String hp = tbl.getValueAt(selectedRow, 2).toString();
+        String hr = tbl.getValueAt(selectedRow, 10).toString();
+        String lb = tbl.getValueAt(selectedRow, 3).toString();
+        String lt = tbl.getValueAt(selectedRow, 4).toString();
+        String kt = tbl.getValueAt(selectedRow, 5).toString();
+        String desk = tbl.getValueAt(selectedRow, 11).toString();
+        String km = tbl.getValueAt(selectedRow, 6).toString();
+        String lantai = tbl.getValueAt(selectedRow, 7).toString();
+        String listrik = tbl.getValueAt(selectedRow, 8).toString();
+        String air = tbl.getValueAt(selectedRow, 9).toString();
+        String b = tbl.getValueAt(selectedRow, 12).toString();
+
+        // Set values to form fields
+        idField.setText(id);
+        tipeField.setText(tipe);
+        hargaPokokField.setText(hp);
+//        hargaRumahField.setText(hr);
+        hargaRumahField.setText(hr.replace(".", ""));
+        luasBangunanField.setText(lb.replace(".", ""));
+        luasTanahField.setText(lt.replace(".", ""));
+        kamarTidurField.setText(kt);
+        deskripsiField.setText(desk);
+        kamarMandiField.setText(km);
+        lantaiField.setText(lantai);
+        listrikField.setText(listrik);
+        sumberAirField.setText(air);
+        bonusAmountField.setText(b);
+        }
+
+        private void txtcariKeyPressed(java.awt.event.KeyEvent evt) {
+            if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+                tabel();
+            }
+    }//GEN-LAST:event_displayAreaMouseClicked
 
     /**
      * @param args the command line arguments
