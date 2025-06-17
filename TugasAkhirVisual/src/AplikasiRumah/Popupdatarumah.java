@@ -95,7 +95,7 @@ public class Popupdatarumah extends javax.swing.JFrame {
 
         getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 170, 780, 190));
 
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/AplikasiRumah/Popup Data Client.jpg"))); // NOI18N
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/Popup Data Rumah.jpg"))); // NOI18N
         getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 900, 426));
 
         pack();

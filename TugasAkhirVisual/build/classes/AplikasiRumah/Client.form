@@ -336,7 +336,7 @@
     <Component class="javax.swing.JLabel" name="jLabel1">
       <Properties>
         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-          <Image iconType="3" name="/AplikasiRumah/Data Client.jpg"/>
+          <Image iconType="3" name="/image/Data Client.jpg"/>
         </Property>
       </Properties>
       <Events>

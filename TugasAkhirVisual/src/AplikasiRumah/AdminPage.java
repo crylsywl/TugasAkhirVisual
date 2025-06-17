@@ -59,7 +59,7 @@ public class AdminPage extends javax.swing.JFrame {
         });
         getContentPane().add(MASTER, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 210, 100, 130));
 
-        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/AplikasiRumah/Dashboard Admin.jpg"))); // NOI18N
+        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/Dashboard Admin.jpg"))); // NOI18N
         getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 900, 550));
 
         pack();

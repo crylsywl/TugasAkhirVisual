@@ -104,7 +104,7 @@ public class Master extends javax.swing.JFrame {
         });
         getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(278, 148, 80, 110));
 
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/AplikasiRumah/Master.jpg"))); // NOI18N
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/Master.jpg"))); // NOI18N
         getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 900, 550));
 
         pack();

@@ -134,7 +134,7 @@ public class GajiKaryawan extends javax.swing.JFrame {
         getContentPane().add(rumahTerjualLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(720, 200, 120, 20));
         getContentPane().add(totalGajiLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 260, 200, 40));
 
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/AplikasiRumah/Gaji Karyawan.jpg"))); // NOI18N
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/Gaji Karyawan.jpg"))); // NOI18N
         jLabel1.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jLabel1MouseClicked(evt);

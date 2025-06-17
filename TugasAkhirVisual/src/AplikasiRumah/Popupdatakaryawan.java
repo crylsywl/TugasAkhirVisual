@@ -94,7 +94,7 @@ public class Popupdatakaryawan extends javax.swing.JFrame {
         });
         getContentPane().add(btnCari, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 130, 40, 20));
 
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/AplikasiRumah/Popup Data Karyawan.jpg"))); // NOI18N
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/Popup Data Karyawan.jpg"))); // NOI18N
         getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 900, 426));
 
         pack();
