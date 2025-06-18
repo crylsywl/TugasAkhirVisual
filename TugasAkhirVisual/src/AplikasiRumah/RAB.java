@@ -29,6 +29,38 @@ public class RAB extends javax.swing.JFrame {
     public RAB() {
         initComponents();
         tabel();
+        autonumber();
+    }
+    
+    protected void autonumber(){ 
+        try { 
+            String sql = "SELECT `Id RAB` FROM RAB order by `Id RAB` asc"; 
+            Statement st = koneksi.getConnection().createStatement();
+            ResultSet rs = st.executeQuery(sql); 
+            idField.setText("AGR0001"); 
+            while (rs.next()) {
+                String idRAB = rs.getString("Id RAB");
+                if (idRAB.length() > 3) {
+                    String angka = idRAB.substring(3); // karena "USR" panjangnya 3
+                    if (!angka.isEmpty()) {
+                        int AGR = Integer.parseInt(angka) + 1;
+
+                        String Nol = "";
+                        if (AGR < 10) {
+                            Nol = "000";
+                        } else if (AGR < 100) {
+                            Nol = "00";
+                        } else if (AGR < 1000) {
+                            Nol = "0";
+                        }
+
+                        idField.setText("AGR" + Nol + AGR);
+                    }
+                }
+            } 
+        }catch(Exception e){ 
+            JOptionPane.showMessageDialog(null, "Auto Number Gagal" +e); 
+        } 
     }
     
     private void tabel() {
@@ -59,7 +91,6 @@ public class RAB extends javax.swing.JFrame {
       
       private void clear() {
         // Clear the input fields
-        idField.setText("");
         tipeField.setText("");
         keteranganField.setText("");
         hargaField.setText("");
@@ -93,6 +124,7 @@ public class RAB extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
+        idField.setEditable(false);
         idField.setBackground(new java.awt.Color(229, 245, 255));
         idField.setBorder(null);
         idField.setOpaque(false);
@@ -243,19 +275,22 @@ public class RAB extends javax.swing.JFrame {
 
     private void simpanMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_simpanMouseClicked
         // TODO add your handling code here:
+        String id = idField.getText();
         String tipe = tipeField.getText();
         String keterangan = keteranganField.getText();
         double harga = Double.parseDouble(hargaField.getText());
 
-        String query = "INSERT INTO rab (Tipe, Keterangan, Harga) VALUES (?, ?, ?)";
+        String query = "INSERT INTO rab (`Id RAB`,Tipe, Keterangan, Harga) VALUES (?, ?, ?, ?)";
         try (Connection connection = koneksi.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-            preparedStatement.setString(1, tipe);
-            preparedStatement.setString(2, keterangan);
-            preparedStatement.setDouble(3, harga);
+            preparedStatement.setString(1, id);
+            preparedStatement.setString(2, tipe);
+            preparedStatement.setString(3, keterangan);
+            preparedStatement.setDouble(4, harga);
             preparedStatement.executeUpdate();
             tabel();
             clear();
+            autonumber();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -270,13 +305,13 @@ public class RAB extends javax.swing.JFrame {
                 return;
             }
 
-            int id = Integer.parseInt(idField.getText());
+            String id = idField.getText().trim();
 
             // Ambil data yang sudah ada dari database
             try (Connection connection = koneksi.getConnection()) {
                 String selectQuery = "SELECT * FROM rab WHERE `Id RAB` = ?";
                 PreparedStatement selectStatement = connection.prepareStatement(selectQuery);
-                selectStatement.setInt(1, id);
+                selectStatement.setString(1, id);
                 ResultSet resultSet = selectStatement.executeQuery();
 
                 if (resultSet.next()) {
@@ -291,7 +326,7 @@ public class RAB extends javax.swing.JFrame {
                     updateStatement.setString(1, tipe);
                     updateStatement.setString(2, keterangan);
                     updateStatement.setDouble(3, harga);
-                    updateStatement.setInt(4, id);
+                    updateStatement.setString(4, id);
 
                     int rowsAffected = updateStatement.executeUpdate();
                     if (rowsAffected > 0) {
@@ -317,15 +352,16 @@ public class RAB extends javax.swing.JFrame {
 
     private void hapusMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_hapusMouseClicked
         // TODO add your handling code here:
-        int id = Integer.parseInt(idField.getText());
+        String id = idField.getText().trim();
 
         String query = "DELETE FROM rab WHERE `Id RAB` = ?";
         try (Connection connection = koneksi.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-            preparedStatement.setInt(1, id);
+            preparedStatement.setString(1, id);
             preparedStatement.executeUpdate();
             tabel();
             clear();
+            autonumber();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -404,7 +440,7 @@ public class RAB extends javax.swing.JFrame {
 
     private void jLabel1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel1MouseClicked
         // TODO add your handling code here:
-        clear();
+ 
     }//GEN-LAST:event_jLabel1MouseClicked
 
     private void displayAreaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_displayAreaMouseClicked

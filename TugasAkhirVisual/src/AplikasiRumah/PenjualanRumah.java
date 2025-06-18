@@ -64,12 +64,12 @@ public class PenjualanRumah extends javax.swing.JFrame {
         }
         
     }
-    public void itemTerpilihKaryawan(){ 
-        Popupdataclient cli = new Popupdataclient(); 
-        cli.client= this;  
-        idKaryawanLabel.setText(idkaryawan);
-        namaKaryawanLabel.setText(namaKaryawan);
-    }
+//    public void itemTerpilihKaryawan(){ 
+//        Popupdatakaryawan cli = new Popupdatakaryawan(); 
+//        cli.karyawan= this;  
+//        idKaryawanLabel.setText(idkaryawan);
+//        namaKaryawanLabel.setText(namaKaryawan);
+//    }
     
 private void simpanDataTransaksi() {
     // Validasi data terisi
@@ -85,9 +85,9 @@ private void simpanDataTransaksi() {
         psClient.setString(1, nikLabel.getText());
         ResultSet hasilClient = psClient.executeQuery();
 
-        int idClient = -1;
+        String idClient = null;
         if (hasilClient.next()) {
-            idClient = hasilClient.getInt("Id Client");
+            idClient = hasilClient.getString("Id Client"); // Menggunakan getString
         } else {
             JOptionPane.showMessageDialog(this, "Data client tidak ditemukan!");
             return;
@@ -99,12 +99,12 @@ private void simpanDataTransaksi() {
         psRumah.setString(1, tipeLabel.getText());
         ResultSet hasilRumah = psRumah.executeQuery();
 
-        int idRumah = -1;
+        String idRumah = null;
         double hargaRumah = 0;
         double totalBonus = 0;
         
         if (hasilRumah.next()) {
-            idRumah = hasilRumah.getInt("Id Rumah");
+            idRumah = hasilRumah.getString("Id Rumah"); // Menggunakan getString
             hargaRumah = hasilRumah.getDouble("Harga Rumah");
             totalBonus = hasilRumah.getDouble("Total Bonus");
         } else {
@@ -117,9 +117,9 @@ private void simpanDataTransaksi() {
                            "VALUES (?, ?, ?, ?, ?)";
         
         PreparedStatement psSimpan = koneksiDB.prepareStatement(querySimpan);
-        psSimpan.setInt(1, idClient);
-        psSimpan.setInt(2, idRumah);
-        psSimpan.setInt(3, Integer.parseInt(idKaryawanLabel.getText()));
+        psSimpan.setString(1, idClient); // Menggunakan setString
+        psSimpan.setString(2, idRumah);  // Menggunakan setString
+        psSimpan.setString(3, idKaryawanLabel.getText()); // Langsung menggunakan String
         psSimpan.setDouble(4, hargaRumah);
         psSimpan.setDouble(5, totalBonus);
         
@@ -133,8 +133,6 @@ private void simpanDataTransaksi() {
     } catch (SQLException e) {
         e.printStackTrace();
         JOptionPane.showMessageDialog(this, "Error database: " + e.getMessage());
-    } catch (NumberFormatException e) {
-        JOptionPane.showMessageDialog(this, "Format angka tidak valid: " + e.getMessage());
     }
 }
 
@@ -346,10 +344,16 @@ private void simpanDataTransaksi() {
 
     private void cariKaryawanButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cariKaryawanButtonMouseClicked
         // TODO add your handling code here:
-        Popupdatakaryawan cli = new Popupdatakaryawan();
-        cli.karyawan = this;
-        cli.setVisible(true);
-        cli.setResizable(false);
+        Popupdatakaryawan popup = new Popupdatakaryawan(new Popupdatakaryawan.KaryawanSelectionListener() {
+        @Override
+        public void onKaryawanSelected(String id, String nama) {
+            // Set nilai ke field di PenjualanRumah
+            idKaryawanLabel.setText(id);
+            namaKaryawanLabel.setText(nama);
+            // Lakukan operasi lain jika diperlukan
+        }
+    });
+    popup.setVisible(true);
     }//GEN-LAST:event_cariKaryawanButtonMouseClicked
 
     private void cariRumahButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cariRumahButtonMouseClicked

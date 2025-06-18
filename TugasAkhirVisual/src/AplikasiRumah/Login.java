@@ -5,6 +5,11 @@
  */
 package AplikasiRumah;
 
+import java.security.MessageDigest;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import javax.swing.*;
 //import java.awt.*;
 //import java.awt.event.ActionEvent;
@@ -21,7 +26,105 @@ public class Login extends javax.swing.JFrame {
      */
     public Login() {
         initComponents();
+    }
+    
+     public static String hashPassword(String password) {
+        try {
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
+            byte[] hash = md.digest(password.getBytes("UTF-8"));
+            StringBuilder sb = new StringBuilder();
+            for (byte b : hash) {
+                sb.append(String.format("%02x", b));
+            }
+            return sb.toString();
+        } catch (Exception e) {
+            // Sebaiknya tangani exception dengan lebih spesifik
+            // atau log errornya, melempar RuntimeException bisa menghentikan aplikasi
+            System.err.println("Error hashing password: " + e.getMessage());
+            // throw new RuntimeException("Error hashing password", e);
+            return null; // Atau kembalikan null jika hashing gagal agar bisa ditangani
+        }
+    }
+     
+     private void attemptLogin() {
+        String username = usernameField.getText().trim();
+        // Cara yang benar dan lebih aman untuk mendapatkan password dari JPasswordField
+        String password = new String(passwordField.getPassword());
 
+        if (username.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Username tidak boleh kosong!", "Login Error", JOptionPane.ERROR_MESSAGE);
+            usernameField.requestFocus();
+            return;
+        }
+        if (password.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Password tidak boleh kosong!", "Login Error", JOptionPane.ERROR_MESSAGE);
+            passwordField.requestFocus();
+            return;
+        }
+
+        String hashedPassword = hashPassword(password);
+        if (hashedPassword == null) {
+            // Hashing gagal, tampilkan error (hashPassword sudah print error)
+            JOptionPane.showMessageDialog(this, "Terjadi kesalahan internal saat memproses password.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+
+        try {
+            // Pastikan Anda memiliki kelas koneksi yang berfungsi di package AplikasiRumah
+            // Jika belum ada, Anda perlu membuatnya atau mengadaptasi dari project lain.
+            // Contoh: conn = AplikasiRumah.KoneksiDB.connect();
+            // Untuk sekarang, saya akan asumsikan Anda punya kelas bernama 'KoneksiRumah'
+            // di package 'AplikasiRumah' dengan metode statis 'connect()'
+             conn = AplikasiRumah.koneksi.getConnection(); // Sesuaikan dengan implementasi koneksi Anda
+
+            // ⚠️ SESUAIKAN NAMA TABEL DAN KOLOM DI BAWAH INI!
+            // Gantilah 'karyawan' dengan nama tabel karyawan Anda.
+            // Gantilah 'USERNAME_KOLOM' dengan nama kolom untuk username di tabel Anda.
+            // Gantilah 'PASSWORD_KOLOM_HASH' dengan nama kolom untuk password (yang sudah di-hash) di tabel Anda.
+            String sql = "SELECT * FROM karyawan WHERE (`Id karyawan`) = ? AND password = ?";
+
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, username);
+            pstmt.setString(2, hashedPassword); // Bandingkan dengan password yang sudah di-hash
+
+            rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                // Login berhasil
+                // Contoh: simpan informasi user yang login jika diperlukan
+                // String namaUserLogin = rs.getString("NAMA_LENGKAP_KOLOM");
+                // UserSession.getInstance().setLoggedInUser(username, namaUserLogin); // Jika ada manajemen sesi
+                
+                UserSession.setUserLogin(rs.getString("Id karyawan"));
+                JOptionPane.showMessageDialog(this, "Berhasil Login!"); // Pesan sukses
+
+                AdminPage ADMIN = new AdminPage(); // Atau halaman yang sesuai
+                ADMIN.setVisible(true);
+                this.dispose(); // Tutup jendela login
+            } else {
+                // Login gagal
+                JOptionPane.showMessageDialog(this, "Username atau Kata Sandi Salah", "Login Gagal", JOptionPane.ERROR_MESSAGE);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Gagal Login! Terjadi kesalahan database: " + e.getMessage(), "Database Error", JOptionPane.ERROR_MESSAGE);
+        } catch (Exception e) { // Menangkap error jika koneksi.getConnection() gagal atau masalah lain
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Terjadi kesalahan umum: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (pstmt != null) pstmt.close();
+                if (conn != null) conn.close();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
     }
 
     /**
@@ -80,28 +183,11 @@ public class Login extends javax.swing.JFrame {
 
     private void loginButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_loginButtonMouseClicked
         // TODO add your handling code here:
-        String username = usernameField.getText();
-                String password = new String(passwordField.getPassword());
-                if (username.equals("admin") && password.equals("admin123")) {
-                    AdminPage ADMIN = new AdminPage();
-                    ADMIN.setVisible(true);
-                    this.dispose();
-                } else {
-                    JOptionPane.showMessageDialog(Login.this, "Username atau Kata Sandi salah");
-                }
+       attemptLogin();
     }//GEN-LAST:event_loginButtonMouseClicked
 
     private void passwordFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_passwordFieldActionPerformed
-        // TODO add your handling code here:
-        String username = usernameField.getText();
-                String password = new String(passwordField.getPassword());
-                if (username.equals("admin") && password.equals("admin123")) {
-                    AdminPage ADMIN = new AdminPage();
-                    ADMIN.setVisible(true);
-                    this.dispose();
-                } else {
-                    JOptionPane.showMessageDialog(Login.this, "Username atau Kata Sandi salah");
-                }
+       attemptLogin();
     }//GEN-LAST:event_passwordFieldActionPerformed
 
     /**

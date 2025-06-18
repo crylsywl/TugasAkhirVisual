@@ -26,6 +26,38 @@ public class TipeRumah extends javax.swing.JFrame {
     public TipeRumah() {
         initComponents();
         tabel();
+        autonumber();
+    }
+    
+    protected void autonumber(){ 
+        try { 
+            String sql = "SELECT `Id Rumah` FROM tipe_rumah order by `Id Rumah` asc"; 
+            Statement st = koneksi.getConnection().createStatement();
+            ResultSet rs = st.executeQuery(sql); 
+            idField.setText("RMH0001"); 
+            while (rs.next()) {
+                String idRumah = rs.getString("Id Rumah");
+                if (idRumah.length() > 3) {
+                    String angka = idRumah.substring(3); // karena "USR" panjangnya 3
+                    if (!angka.isEmpty()) {
+                        int RMH = Integer.parseInt(angka) + 1;
+
+                        String Nol = "";
+                        if (RMH < 10) {
+                            Nol = "000";
+                        } else if (RMH < 100) {
+                            Nol = "00";
+                        } else if (RMH < 1000) {
+                            Nol = "0";
+                        }
+
+                        idField.setText("RMH" + Nol + RMH);
+                    }
+                }
+            } 
+        }catch(Exception e){ 
+            JOptionPane.showMessageDialog(null, "Auto Number Gagal" +e); 
+        } 
     }
     
     NumberFormat numberFormat = NumberFormat.getNumberInstance();
@@ -82,7 +114,6 @@ public class TipeRumah extends javax.swing.JFrame {
       
       private void clear() {
         // Clear the input fields
-        idField.setText("");
         tipeField.setText("");
         hargaPokokField.setText("");
         hargaRumahField.setText("");
@@ -366,6 +397,7 @@ public class TipeRumah extends javax.swing.JFrame {
                 return;
             }
 
+            String id = idField.getText();
             double hargaPokok = hargaPokokField.getText().isEmpty() ? 0 : Double.parseDouble(hargaPokokField.getText().replace(".", "").replace(",", "."));
             double luasBangunan = luasBangunanField.getText().isEmpty() ? 0 : Double.parseDouble(luasBangunanField.getText());
             double luasTanah = luasTanahField.getText().isEmpty() ? 0 : Double.parseDouble(luasTanahField.getText());
@@ -378,25 +410,26 @@ public class TipeRumah extends javax.swing.JFrame {
             double hargaRumah = hargaRumahField.getText().isEmpty() ? 0 : Double.parseDouble(hargaRumahField.getText().replace(".", "").replace(",", "."));
             double totalBonus = bonusAmountField.getText().isEmpty() ? 0 : Double.parseDouble(bonusAmountField.getText().replace(".", "").replace(",", "."));
 
-            String query = "INSERT INTO tipe_rumah (Tipe, `Harga Pokok`, `Luas Bangunan`, `Luas Tanah`, `Kamar Tidur`, " +
+            String query = "INSERT INTO tipe_rumah (`Id Rumah`, Tipe, `Harga Pokok`, `Luas Bangunan`, `Luas Tanah`, `Kamar Tidur`, " +
                           "Deskripsi, `Kamar Mandi`, `Lantai`, Listrik, `Sumber Air`, `Harga Rumah`, `Total Bonus`) " +
-                          "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                          "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             
             try (Connection connection = koneksi.getConnection();
                  PreparedStatement preparedStatement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
                 
-                preparedStatement.setString(1, tipe);
-                preparedStatement.setDouble(2, hargaPokok);
-                preparedStatement.setDouble(3, luasBangunan);
-                preparedStatement.setDouble(4, luasTanah);
-                preparedStatement.setInt(5, kamarTidur);
-                preparedStatement.setString(6, deskripsi);
-                preparedStatement.setInt(7, kamarMandi);
-                preparedStatement.setInt(8, lantai);
-                preparedStatement.setString(9, listrik);
-                preparedStatement.setString(10, sumberAir);
-                preparedStatement.setDouble(11, hargaRumah);
-                preparedStatement.setDouble(12, totalBonus);
+                preparedStatement.setString(1, id);
+                preparedStatement.setString(2, tipe);
+                preparedStatement.setDouble(3, hargaPokok);
+                preparedStatement.setDouble(4, luasBangunan);
+                preparedStatement.setDouble(5, luasTanah);
+                preparedStatement.setInt(6, kamarTidur);
+                preparedStatement.setString(7, deskripsi);
+                preparedStatement.setInt(8, kamarMandi);
+                preparedStatement.setInt(9, lantai);
+                preparedStatement.setString(10, listrik);
+                preparedStatement.setString(11, sumberAir);
+                preparedStatement.setDouble(12, hargaRumah);
+                preparedStatement.setDouble(13, totalBonus);
                 
                 int affectedRows = preparedStatement.executeUpdate();
                 
@@ -409,6 +442,7 @@ public class TipeRumah extends javax.swing.JFrame {
                     JOptionPane.showMessageDialog(this, "Data berhasil ditambahkan!", "Sukses", JOptionPane.INFORMATION_MESSAGE);
                     tabel();
                     clear();
+                    autonumber();
                 } else {
                     JOptionPane.showMessageDialog(this, "Gagal menambahkan data", "Error", JOptionPane.ERROR_MESSAGE);
                 }
@@ -429,7 +463,7 @@ public class TipeRumah extends javax.swing.JFrame {
                 return;
             }
 
-            int id = Integer.parseInt(idField.getText());
+            String id = idField.getText().trim();
             String tipe = tipeField.getText();
             double hargaPokok = hargaPokokField.getText().isEmpty() ? 0 : Double.parseDouble(hargaPokokField.getText().replace(".", "").replace(",", "."));
             double luasBangunan = luasBangunanField.getText().isEmpty() ? 0 : Double.parseDouble(luasBangunanField.getText());
@@ -462,7 +496,7 @@ public class TipeRumah extends javax.swing.JFrame {
                 preparedStatement.setString(10, sumberAir);
                 preparedStatement.setDouble(11, hargaRumah);
                 preparedStatement.setDouble(12, totalBonus);
-                preparedStatement.setInt(13, id);
+                preparedStatement.setString(13, id);
                 
                 int affectedRows = preparedStatement.executeUpdate();
                 
@@ -470,6 +504,7 @@ public class TipeRumah extends javax.swing.JFrame {
                     JOptionPane.showMessageDialog(this, "Data berhasil diupdate!", "Sukses", JOptionPane.INFORMATION_MESSAGE);
                     tabel();
                     clear();
+                    autonumber();
                 } else {
                     JOptionPane.showMessageDialog(this, "Data tidak ditemukan", "Error", JOptionPane.ERROR_MESSAGE);
                 }
@@ -490,7 +525,7 @@ public class TipeRumah extends javax.swing.JFrame {
                 return;
             }
 
-            int id = Integer.parseInt(idField.getText());
+            String id = idField.getText().trim();
             
             int confirm = JOptionPane.showConfirmDialog(this, 
                 "Apakah Anda yakin ingin menghapus data ini?", "Konfirmasi", JOptionPane.YES_NO_OPTION);
@@ -499,7 +534,7 @@ public class TipeRumah extends javax.swing.JFrame {
                 String query = "DELETE FROM tipe_rumah WHERE `Id Rumah` = ?";
                 try (Connection connection = koneksi.getConnection();
                      PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-                    preparedStatement.setInt(1, id);
+                    preparedStatement.setString(1, id);
                     int affectedRows = preparedStatement.executeUpdate();
                     
                     if (affectedRows > 0) {
@@ -735,7 +770,6 @@ public class TipeRumah extends javax.swing.JFrame {
 
     private void jLabel1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel1MouseClicked
         // TODO add your handling code here:
-        clear();
     }//GEN-LAST:event_jLabel1MouseClicked
 
     private void displayAreaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_displayAreaMouseClicked

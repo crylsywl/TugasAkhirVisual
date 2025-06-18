@@ -4,18 +4,42 @@
  * and open the template in the editor.
  */
 package AplikasiRumah;
-
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import javax.swing.JOptionPane;
 /**
  *
  * @author Asus
  */
 public class AdminPage extends javax.swing.JFrame {
+    private Connection conn = new koneksi().getConnection();
 
     /**
      * Creates new form AdminPage
      */
     public AdminPage() {
         initComponents();
+        nama();
+    }
+    
+    protected void nama(){
+        try {
+            String KD = UserSession.getUserLogin(); // Get the employee code from the session
+            String sql = "SELECT `Nama Karyawan` FROM karyawan WHERE `Id karyawan`='" + KD + "'";
+            Statement stat = conn.createStatement();
+            ResultSet hasil = stat.executeQuery(sql);
+            if(hasil.next()){
+                labelnamakaryawan.setText(hasil.getString("Nama Karyawan"));
+            } else {
+                // Optional: Handle the case where no employee is found for the given KD
+                JOptionPane.showMessageDialog(null, "Employee not found for code: " + KD);
+            }
+        } catch (SQLException e){
+            JOptionPane.showMessageDialog(null, "Error retrieving employee name: " + e.getMessage());
+            e.printStackTrace(); // It's good practice to print the stack trace for debugging
+        }
     }
 
     /**
@@ -30,6 +54,7 @@ public class AdminPage extends javax.swing.JFrame {
         LAPORAN = new javax.swing.JLabel();
         TRANSAKSI = new javax.swing.JLabel();
         MASTER = new javax.swing.JLabel();
+        labelnamakaryawan = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -58,6 +83,9 @@ public class AdminPage extends javax.swing.JFrame {
             }
         });
         getContentPane().add(MASTER, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 210, 100, 130));
+
+        labelnamakaryawan.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
+        getContentPane().add(labelnamakaryawan, new org.netbeans.lib.awtextra.AbsoluteConstraints(696, 48, 120, 20));
 
         jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/Dashboard Admin.jpg"))); // NOI18N
         getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 900, 550));
@@ -127,5 +155,6 @@ public class AdminPage extends javax.swing.JFrame {
     private javax.swing.JLabel MASTER;
     private javax.swing.JLabel TRANSAKSI;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel labelnamakaryawan;
     // End of variables declaration//GEN-END:variables
 }

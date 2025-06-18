@@ -30,6 +30,38 @@ public class Client extends javax.swing.JFrame {
     public Client() {
         initComponents();
         tabel();
+        autonumber();
+    }
+    
+    protected void autonumber(){ 
+        try { 
+            String sql = "SELECT `Id Client` FROM client order by `Id Client` asc"; 
+            Statement st = koneksi.getConnection().createStatement();
+            ResultSet rs = st.executeQuery(sql); 
+            idField.setText("CLN0001"); 
+            while (rs.next()) {
+                String idClient = rs.getString("Id Client");
+                if (idClient.length() > 3) {
+                    String angka = idClient.substring(3); // karena "USR" panjangnya 3
+                    if (!angka.isEmpty()) {
+                        int CLN = Integer.parseInt(angka) + 1;
+
+                        String Nol = "";
+                        if (CLN < 10) {
+                            Nol = "000";
+                        } else if (CLN < 100) {
+                            Nol = "00";
+                        } else if (CLN < 1000) {
+                            Nol = "0";
+                        }
+
+                        idField.setText("CLN" + Nol + CLN);
+                    }
+                }
+            } 
+        }catch(Exception e){ 
+            JOptionPane.showMessageDialog(null, "Auto Number Gagal" +e); 
+        } 
     }
 
       private void tabel() {
@@ -73,7 +105,6 @@ public class Client extends javax.swing.JFrame {
       
       private void clear() {
         // Clear the input fields
-        idField.setText("");
         namaField.setText("");
         nikField.setText("");
         nokkField.setText("");
@@ -210,6 +241,7 @@ public class Client extends javax.swing.JFrame {
         });
         getContentPane().add(nikField, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 122, 146, -1));
 
+        idField.setEditable(false);
         idField.setBackground(new java.awt.Color(229, 245, 255));
         idField.setBorder(null);
         idField.addActionListener(new java.awt.event.ActionListener() {
@@ -284,6 +316,8 @@ public class Client extends javax.swing.JFrame {
 
     private void simpanMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_simpanMouseClicked
         // TODO add your handling code here:
+        
+        String id = idField.getText();
         String nik = nikField.getText();
         String nama = namaField.getText();
         String nokk = nokkField.getText();
@@ -292,74 +326,77 @@ public class Client extends javax.swing.JFrame {
         String asuransi = asuransiField.getText();
         double gaji = Double.parseDouble(gajiField.getText());
 
-        String query = "INSERT INTO client (NIK, `Nama Client`, `Nomor KK`, `Alamat`, `NPWP`, `Asuransi`, `Gaji`) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String query = "INSERT INTO client (`Id Client`,NIK, `Nama Client`, `Nomor KK`, `Alamat`, `NPWP`, `Asuransi`, `Gaji`) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         try (Connection connection = koneksi.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-            preparedStatement.setString(1, nik);
-            preparedStatement.setString(2, nama);
-            preparedStatement.setString(3, nokk);
-            preparedStatement.setString(4, alamat);
-            preparedStatement.setString(5, npwp);
-            preparedStatement.setString(6, asuransi);
-            preparedStatement.setDouble(7, gaji);
+            preparedStatement.setString(1, id);
+            preparedStatement.setString(2, nik);
+            preparedStatement.setString(3, nama);
+            preparedStatement.setString(4, nokk);
+            preparedStatement.setString(5, alamat);
+            preparedStatement.setString(6, npwp);
+            preparedStatement.setString(7, asuransi);
+            preparedStatement.setDouble(8, gaji);
             preparedStatement.executeUpdate();
             tabel();
             clear();
+            autonumber();
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }//GEN-LAST:event_simpanMouseClicked
 
     private void ubahMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ubahMouseClicked
-        // TODO add your handling code here:
-        try {
-            int id = Integer.parseInt(idField.getText()); // Ambil ID dari form
+        String id = idField.getText().trim(); // Ambil ID sebagai String
 
-            // Ambil data yang sudah ada dari database
-            try (Connection connection = koneksi.getConnection()) {
-                String selectQuery = "SELECT * FROM client WHERE `Id Client` = ?";
-                PreparedStatement selectStatement = connection.prepareStatement(selectQuery);
-                selectStatement.setInt(1, id);
-                ResultSet resultSet = selectStatement.executeQuery();
+        if (id.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "ID Client tidak boleh kosong!", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
 
-                if (resultSet.next()) {
-                    // Gunakan nilai dari database jika field tidak diubah
-                    String nik = nikField.getText().isEmpty() ? resultSet.getString("NIK") : nikField.getText();
-                    String nama = namaField.getText().isEmpty() ? resultSet.getString("Nama Client") : namaField.getText();
-                    String nokk = nokkField.getText().isEmpty() ? resultSet.getString("Nomor KK") : nokkField.getText();
-                    String alamat = alamatField.getText().isEmpty() ? resultSet.getString("Alamat") : alamatField.getText();
-                    String npwp = npwpField.getText().isEmpty() ? resultSet.getString("NPWP") : npwpField.getText();
-                    String asuransi = asuransiField.getText().isEmpty() ? resultSet.getString("Asuransi") : asuransiField.getText();
-                    double gaji = gajiField.getText().isEmpty() ? resultSet.getDouble("Gaji") : Double.parseDouble(gajiField.getText());
+        // Ambil data yang sudah ada dari database
+        try (Connection connection = koneksi.getConnection()) {
+            String selectQuery = "SELECT * FROM client WHERE `Id Client` = ?";
+            PreparedStatement selectStatement = connection.prepareStatement(selectQuery);
+            selectStatement.setString(1, id); // Ganti ke .setString
+            ResultSet resultSet = selectStatement.executeQuery();
 
-                    // Query untuk update data
-                    String updateQuery = "UPDATE client SET NIK = ?, `Nama Client` = ?, `Nomor KK` = ?, `Alamat` = ?, NPWP = ?, Asuransi = ?, Gaji = ? WHERE `Id Client` = ?";
-                    PreparedStatement updateStatement = connection.prepareStatement(updateQuery);
-                    updateStatement.setString(1, nik);
-                    updateStatement.setString(2, nama);
-                    updateStatement.setString(3, nokk);
-                    updateStatement.setString(4, alamat);
-                    updateStatement.setString(5, npwp);
-                    updateStatement.setString(6, asuransi);
-                    updateStatement.setDouble(7, gaji);
-                    updateStatement.setInt(8, id);
+            if (resultSet.next()) {
+                // Gunakan nilai dari database jika field tidak diubah
+                String nik = nikField.getText().isEmpty() ? resultSet.getString("NIK") : nikField.getText();
+                String nama = namaField.getText().isEmpty() ? resultSet.getString("Nama Client") : namaField.getText();
+                String nokk = nokkField.getText().isEmpty() ? resultSet.getString("Nomor KK") : nokkField.getText();
+                String alamat = alamatField.getText().isEmpty() ? resultSet.getString("Alamat") : alamatField.getText();
+                String npwp = npwpField.getText().isEmpty() ? resultSet.getString("NPWP") : npwpField.getText();
+                String asuransi = asuransiField.getText().isEmpty() ? resultSet.getString("Asuransi") : asuransiField.getText();
+                double gaji = gajiField.getText().isEmpty() ? resultSet.getDouble("Gaji") : Double.parseDouble(gajiField.getText());
 
-                    int rowsAffected = updateStatement.executeUpdate();
-                    if (rowsAffected > 0) {
-                        JOptionPane.showMessageDialog(this, "Data client berhasil diupdate!", "Sukses", JOptionPane.INFORMATION_MESSAGE);
-                        tabel(); // Perbarui tampilan
-                    } else {
-                        JOptionPane.showMessageDialog(this, "Gagal mengupdate data client.", "Error", JOptionPane.ERROR_MESSAGE);
-                    }
+                // Query untuk update data
+                String updateQuery = "UPDATE client SET NIK = ?, `Nama Client` = ?, `Nomor KK` = ?, `Alamat` = ?, NPWP = ?, Asuransi = ?, Gaji = ? WHERE `Id Client` = ?";
+                PreparedStatement updateStatement = connection.prepareStatement(updateQuery);
+                updateStatement.setString(1, nik);
+                updateStatement.setString(2, nama);
+                updateStatement.setString(3, nokk);
+                updateStatement.setString(4, alamat);
+                updateStatement.setString(5, npwp);
+                updateStatement.setString(6, asuransi);
+                updateStatement.setDouble(7, gaji);
+                updateStatement.setString(8, id); // Ganti ke .setString
+
+                int rowsAffected = updateStatement.executeUpdate();
+                if (rowsAffected > 0) {
+                    JOptionPane.showMessageDialog(this, "Data client berhasil diupdate!", "Sukses", JOptionPane.INFORMATION_MESSAGE);
+                    tabel(); // Perbarui tampilan
+                    autonumber();
                 } else {
-                    JOptionPane.showMessageDialog(this, "Client dengan ID tersebut tidak ditemukan", "Error", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(this, "Gagal mengupdate data client.", "Error", JOptionPane.ERROR_MESSAGE);
                 }
-            } catch (SQLException e) {
-                e.printStackTrace();
-                JOptionPane.showMessageDialog(this, "Terjadi kesalahan saat mengupdate data client: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(this, "Client dengan ID tersebut tidak ditemukan", "Error", JOptionPane.ERROR_MESSAGE);
             }
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this, "ID Client harus berupa angka!", "Error", JOptionPane.ERROR_MESSAGE);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Terjadi kesalahan saat mengupdate data client: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Terjadi kesalahan: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
@@ -367,15 +404,16 @@ public class Client extends javax.swing.JFrame {
 
     private void hapusMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_hapusMouseClicked
         // TODO add your handling code here:
-        int id = Integer.parseInt(idField.getText());
+        String id = idField.getText().trim();
 
         String query = "DELETE FROM client WHERE `Id Client` = ?";
         try (Connection connection = koneksi.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-            preparedStatement.setInt(1, id);
+            preparedStatement.setString(1, id);
             preparedStatement.executeUpdate();
             tabel();
             clear();
+            autonumber();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -383,25 +421,7 @@ public class Client extends javax.swing.JFrame {
 
     private void idFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_idFieldActionPerformed
         // TODO add your handling code here:
-        try{
-            Statement st = (Statement)  koneksi.getConnection().createStatement();
-            ResultSet rs = st.executeQuery("SELECT * FROM client WHERE `client` . `Id Client`= '"+idField.getText()+"'");
-
-           while (rs.next()) {
-                idField.setText(rs.getString("Id Client"));
-                nikField.setText(rs.getString("NIK"));
-                namaField.setText(rs.getString("Nama Client"));
-                nokkField.setText(rs.getString("Nomor KK"));
-                npwpField.setText(rs.getString("NPWP"));
-                asuransiField.setText(rs.getString("Asuransi"));
-                gajiField.setText(rs.getString("Gaji"));
-                alamatField.setText(rs.getString("Alamat"));
-            }
-            
-       }catch(Exception e){
-            JOptionPane.showMessageDialog(null,"GAGAL");
-        }
-        tabel();
+       
     }//GEN-LAST:event_idFieldActionPerformed
 
     private void nikFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nikFieldActionPerformed
@@ -509,19 +529,20 @@ public class Client extends javax.swing.JFrame {
     }//GEN-LAST:event_jLabel1MouseClicked
 
     private void displayAreaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_displayAreaMouseClicked
-        // TODO add your handling code here:
         // Get selected row
-        int selectedRow = displayArea.getSelectedRow();
-
+    int selectedRow = displayArea.getSelectedRow();
+    
+    // Pastikan ada row yang dipilih
+    if (selectedRow >= 0) {
         // Get values from selected row
-        String id = tbl.getValueAt(selectedRow, 0).toString();
-        String nama = tbl.getValueAt(selectedRow, 2).toString();
-        String nik = tbl.getValueAt(selectedRow, 1).toString();
-        String nokk = tbl.getValueAt(selectedRow, 3).toString();
-        String npwp = tbl.getValueAt(selectedRow, 4).toString();
-        String asuransi = tbl.getValueAt(selectedRow, 5).toString();
-        String gaji = tbl.getValueAt(selectedRow, 6).toString();
-        String alamat = tbl.getValueAt(selectedRow, 7).toString();
+        String id = displayArea.getValueAt(selectedRow, 0).toString();
+        String nik = displayArea.getValueAt(selectedRow, 1).toString();
+        String nama = displayArea.getValueAt(selectedRow, 2).toString();
+        String nokk = displayArea.getValueAt(selectedRow, 3).toString();
+        String npwp = displayArea.getValueAt(selectedRow, 4).toString();
+        String asuransi = displayArea.getValueAt(selectedRow, 5).toString();
+        String gaji = displayArea.getValueAt(selectedRow, 6).toString();
+        String alamat = displayArea.getValueAt(selectedRow, 7).toString();
 
         // Set values to form fields
         idField.setText(id);
@@ -532,7 +553,7 @@ public class Client extends javax.swing.JFrame {
         asuransiField.setText(asuransi);
         gajiField.setText(gaji);
         alamatField.setText(alamat);
-        }
+    }}
 
         private void txtcariKeyPressed(java.awt.event.KeyEvent evt) {
             if (evt.getKeyCode() == KeyEvent.VK_ENTER) {

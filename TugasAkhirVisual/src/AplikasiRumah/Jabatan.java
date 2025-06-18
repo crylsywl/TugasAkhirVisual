@@ -30,6 +30,38 @@ public class Jabatan extends javax.swing.JFrame {
     public Jabatan() {
         initComponents();
         tabel();
+        autonumber();
+    }
+    
+    protected void autonumber(){ 
+        try { 
+            String sql = "SELECT `Id Jabatan` FROM jabatan order by `Id Jabatan` asc"; 
+            Statement st = koneksi.getConnection().createStatement();
+            ResultSet rs = st.executeQuery(sql); 
+            idField.setText("DIV0001"); 
+            while (rs.next()) {
+                String idJabatan = rs.getString("Id Jabatan");
+                if (idJabatan.length() > 3) {
+                    String angka = idJabatan.substring(3); // karena "USR" panjangnya 3
+                    if (!angka.isEmpty()) {
+                        int DIV = Integer.parseInt(angka) + 1;
+
+                        String Nol = "";
+                        if (DIV < 10) {
+                            Nol = "000";
+                        } else if (DIV < 100) {
+                            Nol = "00";
+                        } else if (DIV < 1000) {
+                            Nol = "0";
+                        }
+
+                        idField.setText("DIV" + Nol + DIV);
+                    }
+                }
+            } 
+        }catch(Exception e){ 
+            JOptionPane.showMessageDialog(null, "Auto Number Gagal" +e); 
+        } 
     }
     
     public void tabel(){
@@ -60,7 +92,6 @@ public class Jabatan extends javax.swing.JFrame {
     
     private void clear() {
         // Clear the input fields
-        idField.setText("");
         jabatanField.setText("");
         gajiField.setText("");
         searchField.setText("");
@@ -91,6 +122,7 @@ public class Jabatan extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
+        idField.setEditable(false);
         idField.setBackground(new java.awt.Color(229, 245, 255));
         idField.setBorder(null);
         idField.setOpaque(false);
@@ -231,19 +263,22 @@ public class Jabatan extends javax.swing.JFrame {
 
     private void simpanMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_simpanMouseClicked
         // TODO add your handling code here:
+        String id = idField.getText();
         String jabatan = jabatanField.getText();
         double gajiPokok = Double.parseDouble(gajiField.getText());
         
 
-        String query = "INSERT INTO jabatan (Jabatan, `Gaji Pokok`) VALUES (?, ?)";
+        String query = "INSERT INTO jabatan (`Id Jabatan`, Jabatan, `Gaji Pokok`) VALUES (?, ?, ?)";
         try (Connection connection = koneksi.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-            preparedStatement.setString(1, jabatan);
-            preparedStatement.setDouble(2, gajiPokok);
+            preparedStatement.setString(1, id);
+            preparedStatement.setString(2, jabatan);
+            preparedStatement.setDouble(3, gajiPokok);
   
             preparedStatement.executeUpdate();
             tabel();
             clear();
+            autonumber();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -252,7 +287,7 @@ public class Jabatan extends javax.swing.JFrame {
     private void ubahMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ubahMouseClicked
         // TODO add your handling code here:
         try {
-            int id = Integer.parseInt(idField.getText());
+            String id = idField.getText().trim();
 
             // 1. Ambil data lama dari database
             String selectQuery = "SELECT Jabatan, `Gaji Pokok` FROM jabatan WHERE `Id Jabatan` = ?";
@@ -261,7 +296,7 @@ public class Jabatan extends javax.swing.JFrame {
 
             try (Connection conn = koneksi.getConnection();
                  PreparedStatement selectStmt = conn.prepareStatement(selectQuery)) {
-                selectStmt.setInt(1, id);
+                selectStmt.setString(1, id);
                 ResultSet rs = selectStmt.executeQuery();
 
                 if (rs.next()) {
@@ -280,11 +315,12 @@ public class Jabatan extends javax.swing.JFrame {
                  PreparedStatement preparedStatement = connection.prepareStatement(updateQuery)) {
                 preparedStatement.setString(1, jabatan);
                 preparedStatement.setDouble(2, gajiPokok);
-                preparedStatement.setInt(3, id);
+                preparedStatement.setString(3, id);
 
                 preparedStatement.executeUpdate();
                 tabel();
                 clear();
+                autonumber();
             }
         } catch (SQLException | NumberFormatException e) {
             e.printStackTrace();
@@ -294,15 +330,16 @@ public class Jabatan extends javax.swing.JFrame {
 
     private void hapusMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_hapusMouseClicked
         // TODO add your handling code here:
-        int id = Integer.parseInt(idField.getText());
+        String id = idField.getText().trim();
 
         String query = "DELETE FROM Jabatan WHERE `Id Jabatan` = ?";
         try (Connection connection = koneksi.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-            preparedStatement.setInt(1, id);
+            preparedStatement.setString(1, id);
             preparedStatement.executeUpdate();
             tabel();
             clear();
+            autonumber();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -366,7 +403,6 @@ public class Jabatan extends javax.swing.JFrame {
 
     private void jLabel1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel1MouseClicked
         // TODO add your handling code here:
-        clear();
     }//GEN-LAST:event_jLabel1MouseClicked
 
     private void searchFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchFieldActionPerformed

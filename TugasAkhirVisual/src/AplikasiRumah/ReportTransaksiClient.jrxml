@@ -45,12 +45,12 @@ transaksi.id=$P{id_transaksi}]]>
 	</queryString>
 	<field name="transaksi_id" class="java.lang.Integer"/>
 	<field name="transaksi_timestamp" class="java.sql.Timestamp"/>
-	<field name="transaksi_client_id" class="java.lang.Integer"/>
-	<field name="transaksi_tipe_rumah_id" class="java.lang.Integer"/>
-	<field name="transaksi_karyawan_id" class="java.lang.Integer"/>
+	<field name="transaksi_client_id" class="java.lang.String"/>
+	<field name="transaksi_tipe_rumah_id" class="java.lang.String"/>
+	<field name="transaksi_karyawan_id" class="java.lang.String"/>
 	<field name="transaksi_harga_rumah" class="java.lang.Double"/>
 	<field name="transaksi_total_bonus" class="java.lang.Double"/>
-	<field name="tipe_rumah_Id_Rumah" class="java.lang.Integer"/>
+	<field name="tipe_rumah_Id_Rumah" class="java.lang.String"/>
 	<field name="tipe_rumah_Tipe" class="java.lang.String"/>
 	<field name="tipe_rumah_Harga_Pokok" class="java.lang.Double"/>
 	<field name="tipe_rumah_Luas_Bangunan" class="java.lang.Double"/>
@@ -63,7 +63,7 @@ transaksi.id=$P{id_transaksi}]]>
 	<field name="tipe_rumah_Sumber_Air" class="java.lang.String"/>
 	<field name="tipe_rumah_Harga_Rumah" class="java.lang.Double"/>
 	<field name="tipe_rumah_Total_Bonus" class="java.lang.Double"/>
-	<field name="client_Id_Client" class="java.lang.Integer"/>
+	<field name="client_Id_Client" class="java.lang.String"/>
 	<field name="client_NIK" class="java.lang.String"/>
 	<field name="client_Nama_Client" class="java.lang.String"/>
 	<field name="client_Nomor_KK" class="java.lang.String"/>
@@ -71,7 +71,7 @@ transaksi.id=$P{id_transaksi}]]>
 	<field name="client_NPWP" class="java.lang.String"/>
 	<field name="client_Asuransi" class="java.lang.String"/>
 	<field name="client_Gaji" class="java.lang.Double"/>
-	<field name="karyawan_Id_karyawan" class="java.lang.Integer"/>
+	<field name="karyawan_Id_karyawan" class="java.lang.String"/>
 	<field name="karyawan_Nama_Karyawan" class="java.lang.String"/>
 	<background>
 		<band splitType="Stretch"/>

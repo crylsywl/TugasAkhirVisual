@@ -21,12 +21,31 @@ import java.awt.event.ActionListener;
  * @author Asus
  */
 public class GajiKaryawan extends javax.swing.JFrame {
+    public String idkaryawan, namaKaryawan;
+    private String currentIdJabatan;
 
     /**
      * Creates new form GajiKaryawan
      */
     public GajiKaryawan() {
         initComponents();
+    }
+    
+    
+//    public void itemTerpilihKaryawan(){ 
+//        Popupdatakaryawan cli = new Popupdatakaryawan(); 
+//        cli.gajikaryawan= this;  
+//        idKaryawanLabel.setText(idkaryawan);
+//        namaKaryawanLabel.setText(namaKaryawan);
+//    }
+    
+    private double parseRupiahToDouble(String text) {
+    try {
+        String clean = text.replaceAll("[^\\d]", ""); // Hapus semua selain angka
+        return Double.parseDouble(clean);
+        } catch (NumberFormatException e) {
+            return 0;
+        }
     }
 
     /**
@@ -38,8 +57,6 @@ public class GajiKaryawan extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        karyawanIdField = new javax.swing.JTextField();
-        jabatanIdField = new javax.swing.JTextField();
         simpan = new javax.swing.JLabel();
         back = new javax.swing.JLabel();
         idLabel = new javax.swing.JLabel();
@@ -53,32 +70,17 @@ public class GajiKaryawan extends javax.swing.JFrame {
         rumahTerjualLabel = new javax.swing.JLabel();
         totalGajiLabel = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
+        simpan1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        karyawanIdField.setBorder(null);
-        karyawanIdField.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                karyawanIdFieldActionPerformed(evt);
-            }
-        });
-        getContentPane().add(karyawanIdField, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 153, 140, -1));
-
-        jabatanIdField.setBorder(null);
-        jabatanIdField.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jabatanIdFieldActionPerformed(evt);
-            }
-        });
-        getContentPane().add(jabatanIdField, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 153, 150, -1));
 
         simpan.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 simpanMouseClicked(evt);
             }
         });
-        getContentPane().add(simpan, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 490, 240, 20));
+        getContentPane().add(simpan, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 484, 257, 27));
 
         back.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         back.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -93,46 +95,51 @@ public class GajiKaryawan extends javax.swing.JFrame {
                 idLabelMouseClicked(evt);
             }
         });
-        getContentPane().add(idLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 190, 130, 30));
+        getContentPane().add(idLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 192, 130, 20));
 
         karyawanNamaLabel.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 karyawanNamaLabelMouseClicked(evt);
             }
         });
-        getContentPane().add(karyawanNamaLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 210, 130, 30));
+        getContentPane().add(karyawanNamaLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 218, 130, 20));
 
         buttonsearch.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 buttonsearchMouseClicked(evt);
             }
         });
-        getContentPane().add(buttonsearch, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 150, 40, 30));
+        getContentPane().add(buttonsearch, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 150, 200, 25));
 
         jabatan.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jabatanMouseClicked(evt);
             }
         });
-        getContentPane().add(jabatan, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 190, 130, 20));
+        getContentPane().add(jabatan, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 192, 130, 20));
 
         gajiPokokJabatan.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 gajiPokokJabatanMouseClicked(evt);
             }
         });
-        getContentPane().add(gajiPokokJabatan, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 210, 130, 30));
+        getContentPane().add(gajiPokokJabatan, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 218, 130, 20));
 
         buttonsearch1.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 buttonsearch1MouseClicked(evt);
             }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                buttonsearch1MouseEntered(evt);
+            }
         });
         getContentPane().add(buttonsearch1, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 150, 40, 20));
-        getContentPane().add(gajiPokokLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(720, 140, 120, 30));
-        getContentPane().add(bonusLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(720, 170, 120, 30));
+        getContentPane().add(gajiPokokLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(720, 147, 120, 20));
+        getContentPane().add(bonusLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(720, 174, 120, 20));
         getContentPane().add(rumahTerjualLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(720, 200, 120, 20));
-        getContentPane().add(totalGajiLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 260, 200, 40));
+
+        totalGajiLabel.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        getContentPane().add(totalGajiLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 266, 200, 20));
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/Gaji Karyawan.jpg"))); // NOI18N
         jLabel1.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -142,20 +149,58 @@ public class GajiKaryawan extends javax.swing.JFrame {
         });
         getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 900, 550));
 
+        simpan1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                simpan1MouseClicked(evt);
+            }
+        });
+        getContentPane().add(simpan1, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 490, 250, 20));
+
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void simpanMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_simpanMouseClicked
         // TODO add your handling code here:
+        // Validasi input
+    if (idLabel.getText().isEmpty() || karyawanNamaLabel.getText().isEmpty() || jabatan.getText().isEmpty() ||
+        gajiPokokJabatan.getText().isEmpty() || bonusLabel.getText().isEmpty() || totalGajiLabel.getText().isEmpty()) {
+        
+        JOptionPane.showMessageDialog(this, "Mohon lengkapi semua data sebelum menyimpan.");
+        return;
+    }
+
+    try (Connection connection = koneksi.getConnection()) {
+        String sql = "INSERT INTO gajikaryawan (id_karyawan, nama_karyawan, jabatan, gaji_pokok, bonus, rumah_terjual, total_gaji) " +
+                     "VALUES (?, ?, ?, ?, ?, ?, ?)";
+        PreparedStatement pst = connection.prepareStatement(sql);
+        
+        pst.setString(1, idLabel.getText());
+        pst.setString(2, karyawanNamaLabel.getText());
+        pst.setString(3, jabatan.getText());
+
+        // Konversi nilai Rupiah menjadi double
+        double gajiPokok = parseRupiahToDouble(gajiPokokJabatan.getText());
+        double bonus = parseRupiahToDouble(bonusLabel.getText());
+        int rumahTerjual = Integer.parseInt(rumahTerjualLabel.getText()); // Jika tidak ada potongan, default 0
+        double totalGaji = parseRupiahToDouble(totalGajiLabel.getText());
+
+        pst.setDouble(4, gajiPokok);
+        pst.setDouble(5, bonus);
+        pst.setInt(6, rumahTerjual);
+        pst.setDouble(7, totalGaji);
+
+        pst.executeUpdate();
+        JOptionPane.showMessageDialog(this, "Data gaji berhasil disimpan.");
+        
+    } catch (SQLException e) {
+        e.printStackTrace();
+        JOptionPane.showMessageDialog(this, "Gagal menyimpan data gaji: " + e.getMessage());
+    }
     }//GEN-LAST:event_simpanMouseClicked
 
     private void jLabel1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel1MouseClicked
         // TODO add your handling code here:
     }//GEN-LAST:event_jLabel1MouseClicked
-
-    private void karyawanIdFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_karyawanIdFieldActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_karyawanIdFieldActionPerformed
 
     private void backMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_backMouseClicked
         // TODO add your handling code here:
@@ -165,100 +210,107 @@ public class GajiKaryawan extends javax.swing.JFrame {
     }//GEN-LAST:event_backMouseClicked
 
     private void buttonsearchMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_buttonsearchMouseClicked
-        String idKaryawan = karyawanIdField.getText();
-        if (idKaryawan.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Masukkan ID Karyawan terlebih dahulu.");
-            return;
+        Popupdatakaryawan popup = new Popupdatakaryawan(new Popupdatakaryawan.KaryawanSelectionListener() {
+        @Override
+        public void onKaryawanSelected(String id, String nama) {
+            // Set nilai ke field di GajiKaryawan
+            idLabel.setText(id);
+            karyawanNamaLabel.setText(nama);
+            // Hitung gaji atau operasi lain
+//            hitungGajiBerdasarkanKaryawan(id);
         }
-
-        try (Connection connection = koneksi.getConnection()) {
-            String query = "SELECT * FROM karyawan WHERE `Id Karyawan` = ?";
-            PreparedStatement preparedStatement = connection.prepareStatement(query);
-            preparedStatement.setString(1, idKaryawan);
-            ResultSet resultSet = preparedStatement.executeQuery();
-
-            if (resultSet.next()) {
-                // Tampilkan nama karyawan
-                idLabel.setText(resultSet.getString("Id Karyawan"));
-                karyawanNamaLabel.setText(resultSet.getString("Nama Karyawan"));
-            } else {
-                JOptionPane.showMessageDialog(this, "Data karyawan tidak ditemukan.");
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Terjadi kesalahan saat mencari data karyawan: " + e.getMessage());
-        }
+    });
+    popup.setVisible(true);
+//        String idKaryawan = karyawanIdField.getText();
+//        if (idKaryawan.isEmpty()) {
+//            JOptionPane.showMessageDialog(this, "Masukkan ID Karyawan terlebih dahulu.");
+//            return;
+//        }
+//
+//        try (Connection connection = koneksi.getConnection()) {
+//            String query = "SELECT * FROM karyawan WHERE `Id Karyawan` = ?";
+//            PreparedStatement preparedStatement = connection.prepareStatement(query);
+//            preparedStatement.setString(1, idKaryawan);
+//            ResultSet resultSet = preparedStatement.executeQuery();
+//
+//            if (resultSet.next()) {
+//                // Tampilkan nama karyawan
+//                idLabel.setText(resultSet.getString("Id Karyawan"));
+//                karyawanNamaLabel.setText(resultSet.getString("Nama Karyawan"));
+//            } else {
+//                JOptionPane.showMessageDialog(this, "Data karyawan tidak ditemukan.");
+//            }
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//            JOptionPane.showMessageDialog(this, "Terjadi kesalahan saat mencari data karyawan: " + e.getMessage());
+//        }
     }//GEN-LAST:event_buttonsearchMouseClicked
 
     private void buttonsearch1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_buttonsearch1MouseClicked
-        String idJabatan = jabatanIdField.getText();
-    String idKaryawan = karyawanIdField.getText();
-    
-    if (idJabatan.isEmpty()) {
-        JOptionPane.showMessageDialog(this, "Masukkan ID Jabatan terlebih dahulu.");
-        return;
-    }
-    
-    if (idKaryawan.isEmpty()) {
-        JOptionPane.showMessageDialog(this, "Masukkan ID Karyawan terlebih dahulu.");
-        return;
-    }
+     // Panggil popup jabatan
+        new Popupdatajabatan(new Popupdatajabatan.KaryawanSelectionListener() {
+            @Override
+            public void onKaryawanSelected(String idJabatan, String namaJabatan, int gajiPokok) {
+                // Simpan ID jabatan secara internal
+                currentIdJabatan = idJabatan;
+                
+                // Tampilkan hanya nama jabatan dan gaji pokok
+                jabatan.setText(namaJabatan);
+                gajiPokokLabel.setText(formatToRupiah(gajiPokok));
+                gajiPokokJabatan.setText(formatToRupiah(gajiPokok));
+                
+                // Lanjutkan dengan pencarian transaksi
+                String idKaryawan = idLabel.getText();
+                
+                if (idKaryawan.isEmpty()) {
+                    JOptionPane.showMessageDialog(GajiKaryawan.this, "Masukkan ID Karyawan terlebih dahulu.");
+                    return;
+                }
 
-    try (Connection connection = koneksi.getConnection()) {
-        // Query untuk mendapatkan data jabatan
-        String jabatanQuery = "SELECT * FROM jabatan WHERE `Id Jabatan` = ?";
-        PreparedStatement jabatanStatement = connection.prepareStatement(jabatanQuery);
-        jabatanStatement.setString(1, idJabatan);
-        ResultSet jabatanResult = jabatanStatement.executeQuery();
+                try (Connection connection = koneksi.getConnection()) {
+                    String transaksiQuery = "SELECT COUNT(*) as rumah_terjual, COALESCE(SUM(total_bonus), 0) as total_bonus " +
+                                          "FROM transaksi " +
+                                          "WHERE karyawan_id = ?";
 
-        if (jabatanResult.next()) {
-            // Tampilkan jabatan dan gaji pokok
-            jabatan.setText(jabatanResult.getString("Jabatan"));
-            double gajiPokok = jabatanResult.getDouble("Gaji Pokok");
-            
-            // Format gaji pokok ke Rupiah
-            gajiPokokLabel.setText(formatToRupiah(gajiPokok));
-            gajiPokokJabatan.setText(formatToRupiah(gajiPokok));
+                    PreparedStatement transaksiStatement = connection.prepareStatement(transaksiQuery);
+                    transaksiStatement.setString(1, idKaryawan);
+                    ResultSet transaksiResult = transaksiStatement.executeQuery();
 
-            // Query untuk menghitung total bonus dan rumah terjual dari transaksi
-            String transaksiQuery = "SELECT COUNT(*) as rumah_terjual, SUM(total_bonus) as total_bonus " +
-                                  "FROM transaksi " +
-                                  "WHERE karyawan_id = ? AND MONTH(timestamp) = MONTH(CURRENT_DATE()) " +
-                                  "AND YEAR(timestamp) = YEAR(CURRENT_DATE())";
-            PreparedStatement transaksiStatement = connection.prepareStatement(transaksiQuery);
-            transaksiStatement.setString(1, idKaryawan);
-            ResultSet transaksiResult = transaksiStatement.executeQuery();
+                    double totalBonus = 0;
+                    int rumahTerjual = 0;
+                    if (transaksiResult.next()) {
+                        rumahTerjual = transaksiResult.getInt("rumah_terjual");
+                        totalBonus = transaksiResult.getDouble("total_bonus");
+                    }
 
-            double totalBonus = 0;
-            int rumahTerjual = 0;
+                    bonusLabel.setText(formatToRupiah(totalBonus));
+                    rumahTerjualLabel.setText(String.valueOf(rumahTerjual));
 
-            if (transaksiResult.next()) {
-                rumahTerjual = transaksiResult.getInt("rumah_terjual");
-                totalBonus = transaksiResult.getDouble("total_bonus");
+                    double totalGaji = gajiPokok + totalBonus;
+                    totalGajiLabel.setText(formatToRupiah(totalGaji));
+
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                    JOptionPane.showMessageDialog(GajiKaryawan.this, 
+                        "Terjadi kesalahan saat mencari data: " + e.getMessage());
+                }
             }
-
-            // Tampilkan bonus dan rumah terjual dengan format
-            bonusLabel.setText(formatToRupiah(totalBonus));
-            rumahTerjualLabel.setText(String.valueOf(rumahTerjual));
-
-            // Hitung total gaji dan format ke Rupiah
-            double totalGaji = gajiPokok + totalBonus;
-            totalGajiLabel.setText(formatToRupiah(totalGaji));
-        } else {
-            JOptionPane.showMessageDialog(this, "Data jabatan tidak ditemukan.");
-        }
-    } catch (SQLException e) {
-        e.printStackTrace();
-        JOptionPane.showMessageDialog(this, "Terjadi kesalahan saat mencari data: " + e.getMessage());
-    }
+        }).setVisible(true);
     }//GEN-LAST:event_buttonsearch1MouseClicked
 
     private String formatToRupiah(double nominal) {
-    java.text.NumberFormat formatRupiah = java.text.NumberFormat.getCurrencyInstance(new java.util.Locale("id", "ID"));
-    String formatted = formatRupiah.format(nominal);
-    // Hilangkan ,00 di belakang
-    return formatted.replaceAll(",00", "");
-    }
+    // Buat DecimalFormat dengan pola khusus
+    java.text.DecimalFormat formatter = new java.text.DecimalFormat("#,##0");
+    
+    // Atur simbol grouping separator menjadi titik
+    java.text.DecimalFormatSymbols symbols = new java.text.DecimalFormatSymbols();
+    symbols.setGroupingSeparator('.');
+    formatter.setDecimalFormatSymbols(symbols);
+    
+    // Format angka dan pastikan tidak ada desimal
+    return formatter.format(nominal);
+}
+    
     private void karyawanNamaLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_karyawanNamaLabelMouseClicked
         // TODO add your handling code here:
     }//GEN-LAST:event_karyawanNamaLabelMouseClicked
@@ -275,9 +327,47 @@ public class GajiKaryawan extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jabatanMouseClicked
 
-    private void jabatanIdFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jabatanIdFieldActionPerformed
+    private void simpan1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_simpan1MouseClicked
+        // Validasi input
+        if (idLabel.getText().isEmpty() || karyawanNamaLabel.getText().isEmpty() || jabatan.getText().isEmpty() ||
+            gajiPokokJabatan.getText().isEmpty() || bonusLabel.getText().isEmpty() || totalGajiLabel.getText().isEmpty()) {
+
+            JOptionPane.showMessageDialog(this, "Mohon lengkapi semua data sebelum menyimpan.");
+            return;
+        }
+
+        try (Connection connection = koneksi.getConnection()) {
+            String sql = "INSERT INTO gajikaryawan (id_karyawan, nama_karyawan, jabatan, gaji_pokok, bonus, rumah_terjual, total_gaji) " +
+            "VALUES (?, ?, ?, ?, ?, ?, ?)";
+            PreparedStatement pst = connection.prepareStatement(sql);
+
+            pst.setString(1, idLabel.getText());
+            pst.setString(2, karyawanNamaLabel.getText());
+            pst.setString(3, jabatan.getText());
+
+            // Konversi nilai Rupiah menjadi double
+            double gajiPokok = parseRupiahToDouble(gajiPokokJabatan.getText());
+            double bonus = parseRupiahToDouble(bonusLabel.getText());
+            int rumahTerjual = Integer.parseInt(rumahTerjualLabel.getText()); // Jika tidak ada potongan, default 0
+            double totalGaji = parseRupiahToDouble(totalGajiLabel.getText());
+
+            pst.setDouble(4, gajiPokok);
+            pst.setDouble(5, bonus);
+            pst.setInt(6, rumahTerjual);
+            pst.setDouble(7, totalGaji);
+
+            pst.executeUpdate();
+            JOptionPane.showMessageDialog(this, "Data gaji berhasil disimpan.");
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Gagal menyimpan data gaji: " + e.getMessage());
+        }
+    }//GEN-LAST:event_simpan1MouseClicked
+
+    private void buttonsearch1MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_buttonsearch1MouseEntered
         // TODO add your handling code here:
-    }//GEN-LAST:event_jabatanIdFieldActionPerformed
+    }//GEN-LAST:event_buttonsearch1MouseEntered
 
     /**
      * @param args the command line arguments
@@ -324,11 +414,10 @@ public class GajiKaryawan extends javax.swing.JFrame {
     private javax.swing.JLabel idLabel;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jabatan;
-    private javax.swing.JTextField jabatanIdField;
-    private javax.swing.JTextField karyawanIdField;
     private javax.swing.JLabel karyawanNamaLabel;
     private javax.swing.JLabel rumahTerjualLabel;
     private javax.swing.JLabel simpan;
+    private javax.swing.JLabel simpan1;
     private javax.swing.JLabel totalGajiLabel;
     // End of variables declaration//GEN-END:variables
 }

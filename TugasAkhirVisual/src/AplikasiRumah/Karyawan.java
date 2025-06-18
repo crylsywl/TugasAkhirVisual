@@ -9,6 +9,7 @@ package AplikasiRumah;
 //import java.awt.*;
 //import java.awt.event.ActionEvent;
 //import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -16,24 +17,60 @@ import java.sql.SQLException;
 import javax.swing.JOptionPane;
 import java.sql.Statement;
 import javax.swing.table.DefaultTableModel;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.nio.charset.StandardCharsets;
 /**
  *
  * @author Asus
  */
 public class Karyawan extends javax.swing.JFrame {
-
+    private DefaultTableModel tbl;
     /**
      * Creates new form Karyawan
      */
     public Karyawan() {
         initComponents();
         tabel();
+        autonumber();
+    }
+    
+    protected void autonumber(){ 
+    try { 
+        String sql = "SELECT `Id Karyawan` FROM karyawan order by `Id Karyawan` asc"; 
+        Statement st = koneksi.getConnection().createStatement();
+        ResultSet rs = st.executeQuery(sql); 
+        idField.setText("USR0001"); 
+        while (rs.next()) {
+            String idKaryawan = rs.getString("Id Karyawan");
+            if (idKaryawan.length() > 3) {
+                String angka = idKaryawan.substring(3); // karena "USR" panjangnya 3
+                if (!angka.isEmpty()) {
+                    int USR = Integer.parseInt(angka) + 1;
+
+                    String Nol = "";
+                    if (USR < 10) {
+                        Nol = "000";
+                    } else if (USR < 100) {
+                        Nol = "00";
+                    } else if (USR < 1000) {
+                        Nol = "0";
+                    }
+
+                    idField.setText("USR" + Nol + USR);
+                }
+            }
+        } 
+    }catch(Exception e){ 
+        JOptionPane.showMessageDialog(null, "Auto Number Gagal" +e); 
+    } 
     }
     
      public void tabel(){
-        DefaultTableModel tbl = new DefaultTableModel();
+        tbl = new DefaultTableModel();
         tbl.addColumn("Id Karyawan");
         tbl.addColumn("Nama Karyawan");
+        tbl.addColumn("password");
         
         try {
             Statement st = (Statement)  koneksi.getConnection().createStatement();
@@ -43,6 +80,7 @@ public class Karyawan extends javax.swing.JFrame {
              tbl.addRow(new Object[]{
                 rs.getString("Id Karyawan"),
                 rs.getString("Nama Karyawan"),
+                rs.getString("password"),
          
             });
              displayArea.setModel(tbl); 
@@ -54,6 +92,28 @@ public class Karyawan extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Koneksi Database Gagal" + e.getMessage());
         }
     }
+     
+     private static String hashPassword(String password) {
+        if (password == null || password.isEmpty()) {
+            return null; // Atau throw IllegalArgumentException
+        }
+        try {
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
+            byte[] hashedBytes = md.digest(password.getBytes(StandardCharsets.UTF_8));
+            // Konversi byte array ke string heksadesimal
+            StringBuilder sb = new StringBuilder();
+            for (byte b : hashedBytes) {
+                sb.append(String.format("%02x", b));
+            }
+            return sb.toString();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Error hashing password: Algoritma tidak ditemukan.", "Hashing Error", JOptionPane.ERROR_MESSAGE);
+            return null; 
+        }
+    }
+     
+     
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -75,6 +135,7 @@ public class Karyawan extends javax.swing.JFrame {
         simpan = new javax.swing.JLabel();
         back = new javax.swing.JLabel();
         search = new javax.swing.JLabel();
+        passwordField = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -101,6 +162,7 @@ public class Karyawan extends javax.swing.JFrame {
         namaField.setBorder(null);
         getContentPane().add(namaField, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 235, 240, -1));
 
+        idField.setEditable(false);
         idField.setBackground(new java.awt.Color(229, 245, 255));
         idField.setBorder(null);
         idField.addActionListener(new java.awt.event.ActionListener() {
@@ -136,6 +198,11 @@ public class Karyawan extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
+        displayArea.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                displayAreaMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(displayArea);
 
         getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 140, 500, 350));
@@ -146,7 +213,7 @@ public class Karyawan extends javax.swing.JFrame {
                 hapusMouseClicked(evt);
             }
         });
-        getContentPane().add(hapus, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 277, 68, 30));
+        getContentPane().add(hapus, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 353, 68, 27));
 
         ubah.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         ubah.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -154,7 +221,7 @@ public class Karyawan extends javax.swing.JFrame {
                 ubahMouseClicked(evt);
             }
         });
-        getContentPane().add(ubah, new org.netbeans.lib.awtextra.AbsoluteConstraints(135, 277, 68, 30));
+        getContentPane().add(ubah, new org.netbeans.lib.awtextra.AbsoluteConstraints(135, 353, 68, 27));
 
         simpan.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         simpan.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -162,7 +229,7 @@ public class Karyawan extends javax.swing.JFrame {
                 simpanMouseClicked(evt);
             }
         });
-        getContentPane().add(simpan, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 277, 68, 30));
+        getContentPane().add(simpan, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 353, 68, 27));
 
         back.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         back.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -180,6 +247,15 @@ public class Karyawan extends javax.swing.JFrame {
         });
         getContentPane().add(search, new org.netbeans.lib.awtextra.AbsoluteConstraints(501, 95, 39, 25));
 
+        passwordField.setBackground(new java.awt.Color(229, 245, 255));
+        passwordField.setBorder(null);
+        passwordField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                passwordFieldActionPerformed(evt);
+            }
+        });
+        getContentPane().add(passwordField, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 310, 240, -1));
+
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/Data Karyawan.jpg"))); // NOI18N
         jLabel1.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -196,60 +272,182 @@ public class Karyawan extends javax.swing.JFrame {
     }//GEN-LAST:event_jComboBox1ActionPerformed
 
     private void simpanMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_simpanMouseClicked
-        // TODO add your handling code here:
-         String nama = namaField.getText();
+        
+        String id = idField.getText();
+        String nama = namaField.getText().trim();
+        // Jika passwordField adalah JPasswordField, gunakan: new String(passwordField.getPassword()).trim();
+        String plainPassword = passwordField.getText().trim(); 
+        
 
-        String query = "INSERT INTO karyawan (`Nama Karyawan`) VALUES (?)";
+        if (nama.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Nama Karyawan tidak boleh kosong!", "Input Error", JOptionPane.ERROR_MESSAGE);
+            namaField.requestFocus();
+            return;
+        }
+        if (plainPassword.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Password tidak boleh kosong!", "Input Error", JOptionPane.ERROR_MESSAGE);
+            passwordField.requestFocus();
+            return;
+        }
+
+        String hashedPassword = hashPassword(plainPassword);
+        if (hashedPassword == null) {
+            // Pesan error sudah ditampilkan oleh hashPassword()
+            return;
+        }
+
+        // Id Karyawan diasumsikan AUTO_INCREMENT oleh database
+        String query = "INSERT INTO karyawan (`Id Karyawan`,`Nama Karyawan`, `password`) VALUES (?, ?, ?)";
         try (Connection connection = koneksi.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-            preparedStatement.setString(1, nama);
+            
+            preparedStatement.setString(1, id);
+            preparedStatement.setString(2, nama);
+            preparedStatement.setString(3, hashedPassword);
             
             preparedStatement.executeUpdate();
-            tabel();
-            clear();
+            JOptionPane.showMessageDialog(this, "Data karyawan berhasil disimpan.");
+            tabel(); // Muat ulang data tabel
+            clear(); // Bersihkan field input
+            autonumber();
         } catch (SQLException e) {
             e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Gagal menyimpan data: " + e.getMessage(), "Database Error", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_simpanMouseClicked
     private void clear() {
         // Clear the input fields
-        idField.setText("");
         namaField.setText("");
         searchField.setText("");
+        passwordField.setText("");
         }
     private void ubahMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ubahMouseClicked
-        // TODO add your handling code here:
-        int id = Integer.parseInt(idField.getText());
-        String nama = namaField.getText();
-        
+        String idText = idField.getText().trim();
+        String nama = namaField.getText().trim();
+        String plainPassword = passwordField.getText(); // jangan di-trim
 
-        String query = "UPDATE karyawan SET `Nama Karyawan` = ? WHERE `Id Karyawan` = ?";
-        try (Connection connection = koneksi.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-            preparedStatement.setString(1, nama);
-            
-            preparedStatement.setInt(2, id);
-            preparedStatement.executeUpdate();
-            tabel();
-            clear();
+        if (idText.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "ID Karyawan tidak boleh kosong untuk mengubah data!", "Input Error", JOptionPane.ERROR_MESSAGE);
+            idField.requestFocus();
+            return;
+        }
+        if (nama.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Nama Karyawan tidak boleh kosong!", "Input Error", JOptionPane.ERROR_MESSAGE);
+            namaField.requestFocus();
+            return;
+        }
+
+        String id = idText;
+        String query;
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+
+        try {
+            connection = koneksi.getConnection();
+
+            if (!plainPassword.isEmpty()) {
+                // Konfirmasi sebelum ganti password
+                int confirm = JOptionPane.showOptionDialog(
+                    this,
+                    "Apakah Anda yakin ingin mengganti password?",
+                    "Konfirmasi",
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.QUESTION_MESSAGE,
+                    null,
+                    new Object[]{"Yakin", "Kembali"}, // Tombol custom
+                    "Kembali" // Default focus
+                );
+
+                if (confirm != JOptionPane.YES_OPTION) {
+                    // Batal mengganti password
+                    return;
+                }
+
+                String hashedPassword = hashPassword(plainPassword);
+                if (hashedPassword == null) return;
+
+                query = "UPDATE karyawan SET `Nama Karyawan` = ?, `password` = ? WHERE `Id Karyawan` = ?";
+                preparedStatement = connection.prepareStatement(query);
+                preparedStatement.setString(1, nama);
+                preparedStatement.setString(2, hashedPassword);
+                preparedStatement.setString(3, id);
+
+                int rowsAffected = preparedStatement.executeUpdate();
+                if (rowsAffected > 0) {
+                    JOptionPane.showMessageDialog(this, "Password telah diganti.");
+                } else {
+                    JOptionPane.showMessageDialog(this, "Gagal mengubah data. ID tidak ditemukan atau tidak ada perubahan.", "Update Info", JOptionPane.INFORMATION_MESSAGE);
+                }
+            } else {
+                // Hanya ubah nama
+                query = "UPDATE karyawan SET `Nama Karyawan` = ? WHERE `Id Karyawan` = ?";
+                preparedStatement = connection.prepareStatement(query);
+                preparedStatement.setString(1, nama);
+                preparedStatement.setString(2, id);
+
+                int rowsAffected = preparedStatement.executeUpdate();
+                if (rowsAffected > 0) {
+                    JOptionPane.showMessageDialog(this, "Data karyawan berhasil diubah.");
+                } else {
+                    JOptionPane.showMessageDialog(this, "Gagal mengubah data. ID tidak ditemukan atau tidak ada perubahan.", "Update Info", JOptionPane.INFORMATION_MESSAGE);
+                }
+            }
+
+            tabel();    // Muat ulang tabel
+            clear();    // Bersihkan field
+            autonumber();
+
         } catch (SQLException e) {
             e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Gagal mengubah data: " + e.getMessage(), "Database Error", JOptionPane.ERROR_MESSAGE);
+        } finally {
+            try {
+                if (preparedStatement != null) preparedStatement.close();
+                if (connection != null) connection.close();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
         }
     }//GEN-LAST:event_ubahMouseClicked
 
     private void hapusMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_hapusMouseClicked
-        // TODO add your handling code here:
-        int id = Integer.parseInt(idField.getText());
+        String idText = idField.getText().trim();
+        if (idText.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "ID Karyawan tidak boleh kosong untuk menghapus data!", "Input Error", JOptionPane.ERROR_MESSAGE);
+            idField.requestFocus();
+            return;
+        }
+        
+        int id;
+        try {
+            id = Integer.parseInt(idText);
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "ID Karyawan harus berupa angka.", "Input Error", JOptionPane.ERROR_MESSAGE);
+            idField.requestFocus();
+            return;
+        }
+        
+        int confirm = JOptionPane.showConfirmDialog(this, "Apakah Anda yakin ingin menghapus data karyawan dengan ID: " + id + "?", "Konfirmasi Hapus", JOptionPane.YES_NO_OPTION);
+        if (confirm != JOptionPane.YES_OPTION) {
+            return;
+        }
 
         String query = "DELETE FROM karyawan WHERE `Id Karyawan` = ?";
         try (Connection connection = koneksi.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setInt(1, id);
-            preparedStatement.executeUpdate();
+            int rowsAffected = preparedStatement.executeUpdate();
+            if (rowsAffected > 0) {
+                 JOptionPane.showMessageDialog(this, "Data karyawan berhasil dihapus.");
+            } else {
+                JOptionPane.showMessageDialog(this, "Data karyawan dengan ID tersebut tidak ditemukan.", "Hapus Info", JOptionPane.INFORMATION_MESSAGE);
+            }
             tabel();
             clear();
+            autonumber();
         } catch (SQLException e) {
             e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Gagal menghapus data: " + e.getMessage(), "Database Error", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_hapusMouseClicked
 
@@ -305,7 +503,7 @@ public class Karyawan extends javax.swing.JFrame {
 
     private void jLabel1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel1MouseClicked
         // TODO add your handling code here:
-        clear();
+       
     }//GEN-LAST:event_jLabel1MouseClicked
 
     private void searchFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchFieldActionPerformed
@@ -333,6 +531,31 @@ public class Karyawan extends javax.swing.JFrame {
         JOptionPane.showMessageDialog(null, "Koneksi Database Gagal" + e.getMessage());
     }
     }//GEN-LAST:event_searchFieldActionPerformed
+
+    private void passwordFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_passwordFieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_passwordFieldActionPerformed
+
+    private void displayAreaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_displayAreaMouseClicked
+        // TODO add your handling code here:
+        int selectedRow = displayArea.getSelectedRow();
+
+        // Get values from selected row
+        String id = tbl.getValueAt(selectedRow, 0).toString();
+        String nama = tbl.getValueAt(selectedRow, 1).toString();
+//        String pass = tbl.getValueAt(selectedRow, 2).toString();
+
+        // Set values to form fields
+        idField.setText(id);
+        namaField.setText(nama);
+//        passwordField.setText(pass);
+        }
+
+        private void txtcariKeyPressed(java.awt.event.KeyEvent evt) {
+            if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+                tabel();
+            }
+    }//GEN-LAST:event_displayAreaMouseClicked
 
     /**
      * @param args the command line arguments
@@ -378,11 +601,13 @@ public class Karyawan extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextField namaField;
+    private javax.swing.JTextField passwordField;
     private javax.swing.JLabel search;
     private javax.swing.JTextField searchField;
     private javax.swing.JLabel simpan;
     private javax.swing.JLabel ubah;
     // End of variables declaration//GEN-END:variables
+
 
     
 }

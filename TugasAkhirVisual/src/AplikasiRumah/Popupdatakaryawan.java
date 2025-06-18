@@ -17,14 +17,23 @@ import javax.swing.table.DefaultTableModel;
 public class Popupdatakaryawan extends javax.swing.JFrame {
     private Connection conn = new koneksi().getConnection(); 
     private DefaultTableModel tabmode; 
-    public PenjualanRumah karyawan = null;
+//    public PenjualanRumah karyawan = null;
+    private KaryawanSelectionListener selectionListener;
+
+   
+    public interface KaryawanSelectionListener {
+        void onKaryawanSelected(String id, String nama);
+    }
+    
     /**
      * Creates new form Popupdataclient
      */
-    public Popupdatakaryawan() {
+    public Popupdatakaryawan(KaryawanSelectionListener listener) {
+        this.selectionListener = listener;
         initComponents();
         datatable();
     }
+    
     
     protected void datatable(){
     Object[] Baris = {"Id Karyawan","Nama Karyawan"};
@@ -101,12 +110,16 @@ public class Popupdatakaryawan extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void tblKaryawanMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblKaryawanMouseClicked
-        // TODO add your handling code here:
-        int tabelPelanggan = tblKaryawan.getSelectedRow();
-        karyawan.idkaryawan = tblKaryawan.getValueAt(tabelPelanggan, 0).toString();
-        karyawan.namaKaryawan = tblKaryawan.getValueAt(tabelPelanggan, 1).toString();
-        karyawan.itemTerpilihKaryawan();
-        this.dispose();
+         int row = tblKaryawan.getSelectedRow();
+        if (row >= 0) { // Pastikan ada row yang dipilih
+            String id = tblKaryawan.getValueAt(row, 0).toString();
+            String nama = tblKaryawan.getValueAt(row, 1).toString();
+            
+            if (selectionListener != null) {
+                selectionListener.onKaryawanSelected(id, nama);
+            }
+            this.dispose();
+        }
     }//GEN-LAST:event_tblKaryawanMouseClicked
 
     private void btnCariMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCariMouseClicked
@@ -144,8 +157,14 @@ public class Popupdatakaryawan extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Popupdatakaryawan().setVisible(true);
-            }
+                // Berikan null sebagai listener atau buat dummy listener
+            new Popupdatakaryawan(new Popupdatakaryawan.KaryawanSelectionListener() {
+                @Override
+                public void onKaryawanSelected(String id, String nama) {
+                    System.out.println("Karyawan terpilih: " + nama);
+                }
+            }).setVisible(true);
+        }
         });
     }
 
