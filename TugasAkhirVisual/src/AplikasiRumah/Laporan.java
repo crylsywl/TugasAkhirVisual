@@ -94,7 +94,7 @@ public class Laporan extends javax.swing.JFrame {
                 jLabel5MouseClicked(evt);
             }
         });
-        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 210, 80, 130));
+        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 210, 90, 130));
 
         jLabel6.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jLabel6.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -102,7 +102,7 @@ public class Laporan extends javax.swing.JFrame {
                 jLabel6MouseClicked(evt);
             }
         });
-        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 210, 80, 130));
+        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 210, 90, 130));
 
         jLabel7.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jLabel7.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -159,8 +159,8 @@ public class Laporan extends javax.swing.JFrame {
 
     private void jLabel6MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel6MouseClicked
         // TODO add your handling code here:
-        Jabatan JABATANPAGE = new Jabatan();
-        JABATANPAGE.setVisible(true);
+        Report_GajiKaryawan REPORT_TRANSAKSIKARYAWAN = new Report_GajiKaryawan();
+        REPORT_TRANSAKSIKARYAWAN.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jLabel6MouseClicked
 

@@ -2,65 +2,56 @@ package AplikasiRumah;
 
 import java.io.InputStream;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.JOptionPane;
-import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.engine.JasperReport;
-import net.sf.jasperreports.engine.JRResultSetDataSource;
 import net.sf.jasperreports.view.JasperViewer;
 
 public class ReportTransaksiClient {
     
     public void printTransaksiById(int idTransaksi) {
         Connection conn = null;
-        PreparedStatement pstmt = null;
-        ResultSet rs = null;
         InputStream reportStream = null;
         
         try {
-            conn = new koneksi().getConnection();
+            // 1. Dapatkan koneksi database
+            conn = koneksi.getConnection();
             
-            // Query yang menangani ID sebagai string
-            String sql = "SELECT t.*, c.`Id Client` as client_id_str, " +
-                        "c.`Nama Client`, k.`Nama Karyawan`, tr.Tipe " +
-                        "FROM transaksi t " +
-                        "JOIN client c ON t.client_id = c.`Id Client` " +
-                        "JOIN karyawan k ON t.karyawan_id = k.`Id Karyawan` " +
-                        "JOIN tipe_rumah tr ON t.tipe_rumah_id = tr.`Id Rumah` " +
-                        "WHERE t.id = ?";
+            // 2. Dapatkan stream untuk file report
+            reportStream = getClass().getResourceAsStream(
+                "/AplikasiRumah/ReportTransaksiClient.jasper");
             
-            pstmt = conn.prepareStatement(sql);
-            pstmt.setInt(1, idTransaksi); // Menggunakan setInt karena parameter method int
-            rs = pstmt.executeQuery();
+            if (reportStream == null) {
+                throw new Exception(
+                    "File report tidak ditemukan. Pastikan:\n" +
+                    "1. File ReportTransaksisClient.jasper ada di folder src/AplikasiRumah\n" +
+                    "2. Nama file tepat (termasuk huruf besar/kecil)\n" +
+                    "3. Project sudah di-clean dan rebuild");
+            }
             
-            // Gunakan JRResultSetDataSource
-            JRResultSetDataSource resultSetDataSource = new JRResultSetDataSource(rs);
-            
-            // Load report
-            reportStream = getClass().getResourceAsStream("/reports/transaksi_client.jrxml");
-            JasperReport jasperReport = JasperCompileManager.compileReport(reportStream);
-            
-            // Isi parameter (jika ada)
+            // 3. Siapkan parameter
             Map<String, Object> parameters = new HashMap<>();
+            parameters.put("id_transaksi", idTransaksi);
             
-            // Generate report
+            // 4. Generate report
             JasperPrint jasperPrint = JasperFillManager.fillReport(
-                jasperReport, parameters, resultSetDataSource);
+                reportStream,
+                parameters,
+                conn);
             
-            // Tampilkan report
-            JasperViewer.viewReport(jasperPrint, false);
+            // 5. Tampilkan report
+            JasperViewer viewer = new JasperViewer(jasperPrint, false);
+            viewer.setTitle("Detail Transaksi #" + idTransaksi);
+            viewer.setVisible(true);
             
         } catch (Exception e) {
+            showError("Error saat mencetak laporan:\n" + e.getMessage());
             e.printStackTrace();
-            showError("Error saat mencetak laporan: " + e.getMessage());
         } finally {
-            // Tutup semua resources
-            closeResources(conn, pstmt, rs, reportStream);
+            // 6. Tutup resources
+            closeResources(conn, reportStream);
         }
     }
     
@@ -71,11 +62,8 @@ public class ReportTransaksiClient {
             JOptionPane.ERROR_MESSAGE);
     }
     
-    private void closeResources(Connection conn, PreparedStatement pstmt, 
-                              ResultSet rs, InputStream stream) {
+    private void closeResources(Connection conn, InputStream stream) {
         try {
-            if (rs != null) rs.close();
-            if (pstmt != null) pstmt.close();
             if (conn != null) conn.close();
             if (stream != null) stream.close();
         } catch (Exception e) {
