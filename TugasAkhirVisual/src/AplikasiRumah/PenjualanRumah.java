@@ -148,7 +148,6 @@ private void simpanDataTransaksi() {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        alamatLabel = new javax.swing.JLabel();
         gajiLabel = new javax.swing.JLabel();
         asuransiLabel = new javax.swing.JLabel();
         kkLabel = new javax.swing.JLabel();
@@ -171,6 +170,8 @@ private void simpanDataTransaksi() {
         cariRumahButton = new javax.swing.JLabel();
         cariClientButton = new javax.swing.JLabel();
         back = new javax.swing.JLabel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        alamatLabel = new javax.swing.JTextArea();
         jScrollPane2 = new javax.swing.JScrollPane();
         deskripsiLabel = new javax.swing.JTextArea();
         jLabel1 = new javax.swing.JLabel();
@@ -178,59 +179,56 @@ private void simpanDataTransaksi() {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        alamatLabel.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        getContentPane().add(alamatLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(124, 329, 160, -1));
-
         gajiLabel.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        getContentPane().add(gajiLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(124, 307, 160, -1));
+        getContentPane().add(gajiLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(124, 300, 160, 27));
 
         asuransiLabel.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        getContentPane().add(asuransiLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(124, 281, 160, -1));
+        getContentPane().add(asuransiLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(124, 275, 160, 27));
 
         kkLabel.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        getContentPane().add(kkLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(124, 233, 160, -1));
+        getContentPane().add(kkLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(124, 227, 160, 27));
 
         npwpLabel.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        getContentPane().add(npwpLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(124, 259, 160, -1));
+        getContentPane().add(npwpLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(124, 252, 160, 27));
 
         clientLabel.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        getContentPane().add(clientLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(124, 207, 160, -1));
+        getContentPane().add(clientLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(124, 200, 160, 27));
 
         nikLabel.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        getContentPane().add(nikLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(124, 181, 160, -1));
+        getContentPane().add(nikLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(124, 173, 160, 27));
 
         listrikLabel.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        getContentPane().add(listrikLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(439, 324, 160, -1));
+        getContentPane().add(listrikLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(439, 320, 160, 25));
 
         lantaiLabel.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        getContentPane().add(lantaiLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(439, 302, 160, -1));
+        getContentPane().add(lantaiLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(439, 298, 160, 25));
 
         kamarMLabel.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        getContentPane().add(kamarMLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(439, 276, 160, -1));
+        getContentPane().add(kamarMLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(439, 272, 160, 25));
 
         luasTLabel.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        getContentPane().add(luasTLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(439, 228, 160, -1));
+        getContentPane().add(luasTLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(439, 224, 160, 25));
 
         kamarTLabel.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        getContentPane().add(kamarTLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(439, 254, 160, -1));
+        getContentPane().add(kamarTLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(439, 250, 160, 25));
 
         luasBLabel.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        getContentPane().add(luasBLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(439, 202, 160, -1));
+        getContentPane().add(luasBLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(439, 198, 160, 25));
 
         tipeLabel.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        getContentPane().add(tipeLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(439, 176, 160, 20));
+        getContentPane().add(tipeLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(439, 173, 160, 25));
 
         airLabel.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        getContentPane().add(airLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(439, 350, 160, -1));
+        getContentPane().add(airLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(439, 346, 160, 25));
 
         hargaLabel.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
         getContentPane().add(hargaLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 476, 240, 20));
 
         idKaryawanLabel.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        getContentPane().add(idKaryawanLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(720, 194, 130, -1));
+        getContentPane().add(idKaryawanLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(720, 180, 130, 27));
 
         namaKaryawanLabel.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        getContentPane().add(namaKaryawanLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(720, 220, 130, -1));
+        getContentPane().add(namaKaryawanLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(720, 206, 130, 27));
 
         simpanButton.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         simpanButton.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -246,7 +244,7 @@ private void simpanDataTransaksi() {
                 cariKaryawanButtonMouseClicked(evt);
             }
         });
-        getContentPane().add(cariKaryawanButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(649, 150, 200, 25));
+        getContentPane().add(cariKaryawanButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 140, 200, 25));
 
         cariRumahButton.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         cariRumahButton.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -271,6 +269,22 @@ private void simpanDataTransaksi() {
             }
         });
         getContentPane().add(back, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 40, 30, 30));
+
+        jScrollPane3.setBorder(null);
+        jScrollPane3.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        jScrollPane3.setHorizontalScrollBar(null);
+
+        alamatLabel.setEditable(false);
+        alamatLabel.setBackground(new java.awt.Color(210, 240, 255));
+        alamatLabel.setColumns(20);
+        alamatLabel.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        alamatLabel.setLineWrap(true);
+        alamatLabel.setRows(3);
+        alamatLabel.setBorder(null);
+        alamatLabel.setMaximumSize(new java.awt.Dimension(165, 90));
+        jScrollPane3.setViewportView(alamatLabel);
+
+        getContentPane().add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 330, 165, 80));
 
         jScrollPane2.setBorder(null);
         jScrollPane2.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
@@ -415,7 +429,7 @@ private void simpanDataTransaksi() {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel airLabel;
-    private javax.swing.JLabel alamatLabel;
+    private javax.swing.JTextArea alamatLabel;
     private javax.swing.JLabel asuransiLabel;
     private javax.swing.JLabel back;
     private javax.swing.JLabel cariClientButton;
@@ -428,6 +442,7 @@ private void simpanDataTransaksi() {
     private javax.swing.JLabel idKaryawanLabel;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JLabel kamarMLabel;
     private javax.swing.JLabel kamarTLabel;
     private javax.swing.JLabel kkLabel;

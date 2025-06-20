@@ -7,6 +7,8 @@ package AplikasiRumah;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
+import java.sql.Statement;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 
@@ -16,7 +18,7 @@ import javax.swing.table.DefaultTableModel;
  */
 public class Popupdatakaryawan extends javax.swing.JFrame {
     private Connection conn = new koneksi().getConnection(); 
-    private DefaultTableModel tabmode; 
+    private DefaultTableModel tbl; 
 //    public PenjualanRumah karyawan = null;
     private KaryawanSelectionListener selectionListener;
 
@@ -36,23 +38,30 @@ public class Popupdatakaryawan extends javax.swing.JFrame {
     
     
     protected void datatable(){
-    Object[] Baris = {"Id Karyawan","Nama Karyawan"};
-    tabmode = new DefaultTableModel(null, Baris);
-    String cariitem = txtcari.getText();
-
-    try {
-        String sql = "SELECT * FROM karyawan where `Id Karyawan` like '%" + cariitem + "%' or `Nama Karyawan` like '%" + cariitem + "%' order by `Id Karyawan` asc";
-        java.sql.Statement stat = conn.createStatement();
-        ResultSet hasil = stat.executeQuery(sql);
-        while (hasil.next()) {
-            tabmode.addRow(new Object[]{
-                hasil.getString(1),
-                hasil.getString(2)
+    tbl = new DefaultTableModel();
+        tbl.addColumn("Id Karyawan");
+        tbl.addColumn("Nama Karyawan");
+        tbl.addColumn("password");
+        
+        try {
+            Statement st = (Statement)  koneksi.getConnection().createStatement();
+            ResultSet rs = st.executeQuery("SELECT * FROM karyawan");
+            
+            while (rs.next()){
+             tbl.addRow(new Object[]{
+                rs.getString("Id Karyawan"),
+                rs.getString("Nama Karyawan"),
+                rs.getString("password"),
+         
             });
+             tblKaryawan.setModel(tbl); 
         }
-        tblKaryawan.setModel(tabmode);
-    } catch (Exception e) {
-    }
+ //           JOptionPane.showMessageDialog(null, "Koneksi Database  Berhasil");
+            
+            
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Koneksi Database Gagal" + e.getMessage());
+        }
 }
 
     /**
@@ -67,7 +76,8 @@ public class Popupdatakaryawan extends javax.swing.JFrame {
         txtcari = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblKaryawan = new javax.swing.JTable();
-        btnCari = new javax.swing.JLabel();
+        jComboBox1 = new javax.swing.JComboBox<>();
+        search = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -96,12 +106,22 @@ public class Popupdatakaryawan extends javax.swing.JFrame {
 
         getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 170, 780, 190));
 
-        btnCari.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                btnCariMouseClicked(evt);
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Id Karyawan", "Nama Karyawan" }));
+        jComboBox1.setOpaque(false);
+        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBox1ActionPerformed(evt);
             }
         });
-        getContentPane().add(btnCari, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 130, 40, 20));
+        getContentPane().add(jComboBox1, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 130, -1, -1));
+
+        search.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        search.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                searchMouseClicked(evt);
+            }
+        });
+        getContentPane().add(search, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 130, 39, 25));
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/Popup Data Karyawan.jpg"))); // NOI18N
         getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 900, 426));
@@ -122,9 +142,35 @@ public class Popupdatakaryawan extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_tblKaryawanMouseClicked
 
-    private void btnCariMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCariMouseClicked
+    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_btnCariMouseClicked
+    }//GEN-LAST:event_jComboBox1ActionPerformed
+
+    private void searchMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_searchMouseClicked
+        // TODO add your handling code here:
+        DefaultTableModel tbl = new DefaultTableModel();
+        tbl.addColumn("Id Karyawan");
+        tbl.addColumn("Nama Karyawan");
+
+        try {
+            Statement st = (Statement) koneksi.getConnection().createStatement();
+            String selectedColumn = (String) jComboBox1.getSelectedItem();
+            String searchText = txtcari.getText();
+
+            String query = "SELECT * FROM karyawan WHERE `" + selectedColumn + "` LIKE '%" + searchText + "%'";
+            ResultSet rs = st.executeQuery(query);
+
+            while (rs.next()) {
+                tbl.addRow(new Object[]{
+                    rs.getString("Id Karyawan"),
+                    rs.getString("Nama Karyawan"),
+                });
+                tblKaryawan.setModel(tbl);
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Koneksi Database Gagal" + e.getMessage());
+        }
+    }//GEN-LAST:event_searchMouseClicked
 
     /**
      * @param args the command line arguments
@@ -169,9 +215,10 @@ public class Popupdatakaryawan extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel btnCari;
+    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel search;
     private javax.swing.JTable tblKaryawan;
     private javax.swing.JTextField txtcari;
     // End of variables declaration//GEN-END:variables

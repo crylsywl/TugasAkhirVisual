@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" language="groovy" pageWidth="792" pageHeight="325" orientation="Landscape" columnWidth="752" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="1755951a-9f96-42fa-9cfc-cc0a4829bee6">
-	<property name="ireport.zoom" value="1.1000000000000036"/>
-	<property name="ireport.x" value="0"/>
+	<property name="ireport.zoom" value="1.7715610000000113"/>
+	<property name="ireport.x" value="353"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="id_transaksi" class="java.lang.String"/>
 	<queryString>
@@ -93,7 +93,7 @@ transaksi.id=$P{id_transaksi}]]>
 	<pageHeader>
 		<band height="40" splitType="Stretch">
 			<textField>
-				<reportElement x="0" y="0" width="100" height="20" uuid="d9c4207f-5311-4a19-95ce-dcac401783f2"/>
+				<reportElement x="94" y="0" width="100" height="20" uuid="d9c4207f-5311-4a19-95ce-dcac401783f2"/>
 				<textFieldExpression><![CDATA[$F{client_NIK}]]></textFieldExpression>
 			</textField>
 			<textField>
@@ -105,9 +105,25 @@ transaksi.id=$P{id_transaksi}]]>
 				<textFieldExpression><![CDATA[$F{transaksi_timestamp}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="0" y="20" width="123" height="20" uuid="0c4c1da3-07df-4f06-a899-70772af52911"/>
+				<reportElement x="94" y="20" width="123" height="20" uuid="0c4c1da3-07df-4f06-a899-70772af52911"/>
 				<textFieldExpression><![CDATA[$F{client_Nama_Client}]]></textFieldExpression>
 			</textField>
+			<staticText>
+				<reportElement x="0" y="0" width="94" height="20" uuid="f3240ce8-d18a-48f8-91cf-7d95692e5f08"/>
+				<text><![CDATA[NIK		:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="20" width="94" height="20" uuid="9008b868-f853-4bca-bc44-6f64ff475632"/>
+				<text><![CDATA[Nama Client	:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="602" y="0" width="50" height="20" uuid="e3219e0c-01a4-49c7-baac-ab676da7bbd1"/>
+				<text><![CDATA[No.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="602" y="20" width="50" height="20" uuid="882786f2-925c-4c39-8125-5fecfe574f1a"/>
+				<text><![CDATA[Tanggal	:]]></text>
+			</staticText>
 		</band>
 	</pageHeader>
 	<columnHeader>

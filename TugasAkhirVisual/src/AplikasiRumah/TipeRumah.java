@@ -351,7 +351,7 @@ public class TipeRumah extends javax.swing.JFrame {
 
         deskripsiField.setBackground(new java.awt.Color(229, 245, 255));
         deskripsiField.setColumns(20);
-        deskripsiField.setFont(new java.awt.Font("Monospaced", 0, 16)); // NOI18N
+        deskripsiField.setFont(new java.awt.Font("Tahoma", 0, 16)); // NOI18N
         deskripsiField.setLineWrap(true);
         deskripsiField.setRows(3);
         deskripsiField.setBorder(null);
@@ -366,7 +366,7 @@ public class TipeRumah extends javax.swing.JFrame {
                 searchMouseClicked(evt);
             }
         });
-        getContentPane().add(search, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 296, 39, 25));
+        getContentPane().add(search, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 346, 39, 25));
 
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Id Rumah", "Tipe", "Harga Pokok", "Luas Bangunan", "Luas Tanah", "Kamar Tidur", "Kamar Mandi", "Lantai", "Listrik", "Sumber Air", "Harga Rumah", "Deskripsi", "Total Bonus" }));
         getContentPane().add(jComboBox1, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 346, -1, -1));

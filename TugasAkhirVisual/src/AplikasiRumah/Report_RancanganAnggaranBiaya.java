@@ -243,6 +243,8 @@ public class Report_RancanganAnggaranBiaya extends javax.swing.JFrame {
 
     private void btnRefresh1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnRefresh1MouseClicked
         // TODO add your handling code here:
+        String selectedTipe = (String) comboBoxTipe.getSelectedItem();
+        new ReportRancanganAnggaranBiaya().printRABByTipe(selectedTipe);
     }//GEN-LAST:event_btnRefresh1MouseClicked
 
     private void btnShowAllMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnShowAllMouseClicked

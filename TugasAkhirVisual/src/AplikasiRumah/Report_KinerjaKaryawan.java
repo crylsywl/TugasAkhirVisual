@@ -153,8 +153,6 @@ public class Report_KinerjaKaryawan extends javax.swing.JFrame {
         btnShowAll = new javax.swing.JLabel();
         back = new javax.swing.JLabel();
         comboBoxTahun = new javax.swing.JComboBox<>();
-        lblTotalHarga = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -178,7 +176,7 @@ public class Report_KinerjaKaryawan extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(table);
 
-        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 290, 780, 130));
+        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 290, 780, 150));
 
         btnRefresh.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnRefresh.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -216,12 +214,8 @@ public class Report_KinerjaKaryawan extends javax.swing.JFrame {
         comboBoxTahun.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         comboBoxTahun.setBorder(null);
         getContentPane().add(comboBoxTahun, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 140, 140, -1));
-        getContentPane().add(lblTotalHarga, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 428, 140, 20));
 
-        jLabel2.setText("Total :");
-        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 430, -1, -1));
-
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/Rancangan Anggaran Biaya.jpg"))); // NOI18N
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/Kinerja Karyawan.jpg"))); // NOI18N
         getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 900, 550));
 
         pack();
@@ -298,9 +292,7 @@ public class Report_KinerjaKaryawan extends javax.swing.JFrame {
     private javax.swing.JLabel btnShowAll;
     private javax.swing.JComboBox<String> comboBoxTahun;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JLabel lblTotalHarga;
     private javax.swing.JTable table;
     // End of variables declaration//GEN-END:variables
 }

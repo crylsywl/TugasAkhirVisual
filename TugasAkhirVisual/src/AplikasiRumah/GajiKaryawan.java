@@ -76,6 +76,7 @@ public class GajiKaryawan extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
+        simpan.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         simpan.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 simpanMouseClicked(evt);
@@ -105,6 +106,7 @@ public class GajiKaryawan extends javax.swing.JFrame {
         });
         getContentPane().add(karyawanNamaLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 218, 130, 20));
 
+        buttonsearch.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         buttonsearch.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 buttonsearchMouseClicked(evt);
@@ -126,6 +128,7 @@ public class GajiKaryawan extends javax.swing.JFrame {
         });
         getContentPane().add(gajiPokokJabatan, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 218, 130, 20));
 
+        buttonsearch1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         buttonsearch1.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 buttonsearch1MouseClicked(evt);
@@ -134,7 +137,7 @@ public class GajiKaryawan extends javax.swing.JFrame {
                 buttonsearch1MouseEntered(evt);
             }
         });
-        getContentPane().add(buttonsearch1, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 150, 40, 20));
+        getContentPane().add(buttonsearch1, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 150, 200, 27));
         getContentPane().add(gajiPokokLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(720, 147, 120, 20));
         getContentPane().add(bonusLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(720, 174, 120, 20));
         getContentPane().add(rumahTerjualLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(720, 200, 120, 20));
@@ -150,6 +153,7 @@ public class GajiKaryawan extends javax.swing.JFrame {
         getContentPane().add(simpan1, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 490, 250, 20));
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/Gaji Karyawan.jpg"))); // NOI18N
+        jLabel1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         jLabel1.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jLabel1MouseClicked(evt);

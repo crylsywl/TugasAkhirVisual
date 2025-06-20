@@ -7,6 +7,8 @@ package AplikasiRumah;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
+import java.sql.Statement;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 
@@ -16,8 +18,9 @@ import javax.swing.table.DefaultTableModel;
  */
 public class Popupdataclient extends javax.swing.JFrame {
     private Connection conn = new koneksi().getConnection(); 
-    private DefaultTableModel tabmode; 
+//    private DefaultTableModel tabmode; 
     public PenjualanRumah client = null;
+    private DefaultTableModel tbl;
     
     /**
      * Creates new form Popupdataclient
@@ -28,29 +31,42 @@ public class Popupdataclient extends javax.swing.JFrame {
     }
     
     protected void datatable(){
-    Object[] Baris = {"Id Client","NIK","Nama Client","Nomor KK","Alamat", "NPWP", "Asuransi", "Gaji"};
-    tabmode = new DefaultTableModel(null, Baris);
-    String cariitem = txtcari.getText();
-
-    try {
-        String sql = "SELECT * FROM client where `Id Client` like '%" + cariitem + "%' or `Nama Client` like '%" + cariitem + "%' order by `Id Client` asc";
-        java.sql.Statement stat = conn.createStatement();
-        ResultSet hasil = stat.executeQuery(sql);
-        while (hasil.next()) {
-            tabmode.addRow(new Object[]{
-                hasil.getString(1),
-                hasil.getString(2),
-                hasil.getString(3),
-                hasil.getString(4),
-                hasil.getString(5),
-                hasil.getString(6),
-                hasil.getString(7),
-                hasil.getString(8)
+    Object[] Baris = {
+            "Id Client",
+            "NIK",
+            "Nama Client",
+            "Nomor KK",
+            "NPWP",
+            "Asuransi",
+            "Gaji",
+            "Alamat"
+        };
+        tbl = new DefaultTableModel(null, Baris);
+        
+        try {
+            Statement st = (Statement)  koneksi.getConnection().createStatement();
+            ResultSet rs = st.executeQuery("SELECT * FROM client");
+            
+            while (rs.next()){
+             tbl.addRow(new Object[]{
+                rs.getString("Id Client"),
+                rs.getString("NIK"),
+                rs.getString("Nama Client"),
+                rs.getString("Nomor KK"),
+                rs.getString("NPWP"),
+                rs.getString("Asuransi"),
+                rs.getString("Gaji"),
+                rs.getString("Alamat"),
+         
             });
+             tblclient.setModel(tbl); 
         }
-        tblclient.setModel(tabmode);
-    } catch (Exception e) {
-    }
+ //           JOptionPane.showMessageDialog(null, "Koneksi Database  Berhasil");
+            
+            
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Koneksi Database Gagal" + e.getMessage());
+        }
 }
 
     /**
@@ -62,6 +78,8 @@ public class Popupdataclient extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        search = new javax.swing.JLabel();
+        jComboBox1 = new javax.swing.JComboBox<>();
         txtcari = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblclient = new javax.swing.JTable();
@@ -69,6 +87,17 @@ public class Popupdataclient extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        search.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        search.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                searchMouseClicked(evt);
+            }
+        });
+        getContentPane().add(search, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 130, 39, 25));
+
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Id Client", "NIK", "Nama Client", "Nomor KK", "NPWP", "Asuransi", "Gaji", "Alamat" }));
+        getContentPane().add(jComboBox1, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 130, -1, -1));
 
         txtcari.setBorder(null);
         getContentPane().add(txtcari, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 130, 140, -1));
@@ -105,13 +134,51 @@ public class Popupdataclient extends javax.swing.JFrame {
         client.nik = tblclient.getValueAt(tabelPelanggan, 1).toString();
         client.client = tblclient.getValueAt(tabelPelanggan, 2).toString();
         client.kk = tblclient.getValueAt(tabelPelanggan, 3).toString();
-        client.npwp = tblclient.getValueAt(tabelPelanggan, 5).toString();
-        client.asuransi = tblclient.getValueAt(tabelPelanggan, 6).toString();
-        client.gaji = tblclient.getValueAt(tabelPelanggan, 7).toString();
-        client.alamat = tblclient.getValueAt(tabelPelanggan, 4).toString();
+        client.npwp = tblclient.getValueAt(tabelPelanggan, 4).toString();
+        client.asuransi = tblclient.getValueAt(tabelPelanggan, 5).toString();
+        client.gaji = tblclient.getValueAt(tabelPelanggan, 6).toString();
+        client.alamat = tblclient.getValueAt(tabelPelanggan, 7).toString();
         client.itemTerpilihclient();
         this.dispose();
     }//GEN-LAST:event_tblclientMouseClicked
+
+    private void searchMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_searchMouseClicked
+        // TODO add your handling code here:
+        DefaultTableModel tbl = new DefaultTableModel();
+        tbl.addColumn("Id Client");
+        tbl.addColumn("NIK");
+        tbl.addColumn("Nama Client");
+        tbl.addColumn("Nomor KK");
+        tbl.addColumn("NPWP");
+        tbl.addColumn("Asuransi");
+        tbl.addColumn("Gaji");
+        tbl.addColumn("Alamat");
+
+        try {
+            Statement st = (Statement) koneksi.getConnection().createStatement();
+            String selectedColumn = (String) jComboBox1.getSelectedItem();
+            String searchText = txtcari.getText();
+
+            String query = "SELECT * FROM client WHERE `" + selectedColumn + "` LIKE '%" + searchText + "%'";
+            ResultSet rs = st.executeQuery(query);
+
+            while (rs.next()) {
+                tbl.addRow(new Object[]{
+                    rs.getString("Id Client"),
+                    rs.getString("NIK"),
+                    rs.getString("Nama Client"),
+                    rs.getString("Nomor KK"),
+                    rs.getString("NPWP"),
+                    rs.getString("Asuransi"),
+                    rs.getString("Gaji"),
+                    rs.getString("Alamat"),
+                });
+                tblclient.setModel(tbl);
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Koneksi Database Gagal" + e.getMessage());
+        }
+    }//GEN-LAST:event_searchMouseClicked
 
     /**
      * @param args the command line arguments
@@ -149,8 +216,10 @@ public class Popupdataclient extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel search;
     private javax.swing.JTable tblclient;
     private javax.swing.JTextField txtcari;
     // End of variables declaration//GEN-END:variables
