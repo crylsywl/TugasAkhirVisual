@@ -1,0 +1,348 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" language="groovy" pageWidth="792" pageHeight="325" orientation="Landscape" columnWidth="752" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="1755951a-9f96-42fa-9cfc-cc0a4829bee6">
+	<property name="ireport.zoom" value="1.2100000000000035"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="id_transaksi" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[SELECT
+     transaksi.`id` AS transaksi_id,
+     transaksi.`timestamp` AS transaksi_timestamp,
+     transaksi.`client_id` AS transaksi_client_id,
+     transaksi.`tipe_rumah_id` AS transaksi_tipe_rumah_id,
+     transaksi.`karyawan_id` AS transaksi_karyawan_id,
+     transaksi.`harga_rumah` AS transaksi_harga_rumah,
+     transaksi.`total_bonus` AS transaksi_total_bonus,
+     client.`Id Client` AS client_Id_Client,
+     client.`NIK` AS client_NIK,
+     client.`Nama Client` AS client_Nama_Client,
+     client.`Nomor KK` AS client_Nomor_KK,
+     client.`Alamat` AS client_Alamat,
+     client.`NPWP` AS client_NPWP,
+     client.`Asuransi` AS client_Asuransi,
+     client.`Gaji` AS client_Gaji,
+     tipe_rumah.`Id Rumah` AS tipe_rumah_Id_Rumah,
+     tipe_rumah.`Tipe` AS tipe_rumah_Tipe,
+     tipe_rumah.`Harga Pokok` AS tipe_rumah_Harga_Pokok,
+     tipe_rumah.`Luas Bangunan` AS tipe_rumah_Luas_Bangunan,
+     tipe_rumah.`Luas Tanah` AS tipe_rumah_Luas_Tanah,
+     tipe_rumah.`Kamar Tidur` AS tipe_rumah_Kamar_Tidur,
+     tipe_rumah.`Deskripsi` AS tipe_rumah_Deskripsi,
+     tipe_rumah.`Kamar Mandi` AS tipe_rumah_Kamar_Mandi,
+     tipe_rumah.`Lantai` AS tipe_rumah_Lantai,
+     tipe_rumah.`Listrik` AS tipe_rumah_Listrik,
+     tipe_rumah.`Sumber Air` AS tipe_rumah_Sumber_Air,
+     tipe_rumah.`Harga Rumah` AS tipe_rumah_Harga_Rumah,
+     tipe_rumah.`Total Bonus` AS tipe_rumah_Total_Bonus,
+     karyawan.`Id karyawan` AS karyawan_Id_karyawan,
+     karyawan.`Nama Karyawan` AS karyawan_Nama_Karyawan,
+     karyawan.`password` AS karyawan_password
+FROM
+     `client` client INNER JOIN `transaksi` transaksi ON client.`Id Client` = transaksi.`client_id`
+     INNER JOIN `tipe_rumah` tipe_rumah ON transaksi.`tipe_rumah_id` = tipe_rumah.`Id Rumah`
+     INNER JOIN `karyawan` karyawan ON transaksi.`karyawan_id` = karyawan.`Id karyawan`
+
+WHERE
+transaksi.id=$P{id_transaksi}]]>
+	</queryString>
+	<field name="transaksi_id" class="java.lang.Integer"/>
+	<field name="transaksi_timestamp" class="java.sql.Timestamp"/>
+	<field name="transaksi_client_id" class="java.lang.String"/>
+	<field name="transaksi_tipe_rumah_id" class="java.lang.String"/>
+	<field name="transaksi_karyawan_id" class="java.lang.String"/>
+	<field name="transaksi_harga_rumah" class="java.lang.Double"/>
+	<field name="transaksi_total_bonus" class="java.lang.Double"/>
+	<field name="client_Id_Client" class="java.lang.String"/>
+	<field name="client_NIK" class="java.lang.String"/>
+	<field name="client_Nama_Client" class="java.lang.String"/>
+	<field name="client_Nomor_KK" class="java.lang.String"/>
+	<field name="client_Alamat" class="java.lang.String"/>
+	<field name="client_NPWP" class="java.lang.String"/>
+	<field name="client_Asuransi" class="java.lang.String"/>
+	<field name="client_Gaji" class="java.lang.Double"/>
+	<field name="tipe_rumah_Id_Rumah" class="java.lang.String"/>
+	<field name="tipe_rumah_Tipe" class="java.lang.String"/>
+	<field name="tipe_rumah_Harga_Pokok" class="java.lang.Double"/>
+	<field name="tipe_rumah_Luas_Bangunan" class="java.lang.Double"/>
+	<field name="tipe_rumah_Luas_Tanah" class="java.lang.Double"/>
+	<field name="tipe_rumah_Kamar_Tidur" class="java.lang.Integer"/>
+	<field name="tipe_rumah_Deskripsi" class="java.lang.String"/>
+	<field name="tipe_rumah_Kamar_Mandi" class="java.lang.Integer"/>
+	<field name="tipe_rumah_Lantai" class="java.lang.Integer"/>
+	<field name="tipe_rumah_Listrik" class="java.lang.String"/>
+	<field name="tipe_rumah_Sumber_Air" class="java.lang.String"/>
+	<field name="tipe_rumah_Harga_Rumah" class="java.lang.Double"/>
+	<field name="tipe_rumah_Total_Bonus" class="java.lang.Double"/>
+	<field name="karyawan_Id_karyawan" class="java.lang.String"/>
+	<field name="karyawan_Nama_Karyawan" class="java.lang.String"/>
+	<field name="karyawan_password" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="79" splitType="Stretch">
+			<staticText>
+				<reportElement x="268" y="31" width="216" height="37" uuid="a63a62bd-182c-4326-81c5-40248b26e218"/>
+				<textElement textAlignment="Center">
+					<font fontName="SansSerif" size="20" isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[TRANSAKSI CLIENT]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="40" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="100" height="20" uuid="d9c4207f-5311-4a19-95ce-dcac401783f2"/>
+				<textFieldExpression><![CDATA[$F{client_NIK}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="652" y="0" width="100" height="20" uuid="31e8c792-58e9-4432-b5c6-298f708b3803"/>
+				<textFieldExpression><![CDATA[$F{transaksi_id}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="652" y="20" width="100" height="20" uuid="0fe48004-96db-4d72-85b2-6583cad57dd4"/>
+				<textFieldExpression><![CDATA[$F{transaksi_timestamp}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="20" width="123" height="20" uuid="0c4c1da3-07df-4f06-a899-70772af52911"/>
+				<textFieldExpression><![CDATA[$F{client_Nama_Client}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="20" splitType="Stretch">
+			<staticText>
+				<reportElement x="376" y="0" width="94" height="20" uuid="f97c3973-e38c-4d8e-a893-a8a6ea8110b8"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Kamar Tidur]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="94" y="0" width="94" height="20" uuid="b604a7d7-d714-4953-954d-8e6dc170a010"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Luas Tanah]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="188" y="0" width="94" height="20" uuid="1310b683-7d5b-407a-a711-73778b03cb33"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Luas Bangunan]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="0" width="94" height="20" uuid="f64ceb88-d166-4b27-b61b-fd90c4f08f5a"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Tipe Rumah]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="282" y="0" width="94" height="20" uuid="60aaf561-8c1a-4519-8771-bbdc1b1c1d63"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Kamar Mandi]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="470" y="0" width="94" height="20" uuid="9e83def9-933c-443e-afab-5565644826cd"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Lantai]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="564" y="0" width="94" height="20" uuid="2447478f-5e70-47a1-a89a-594f1d787851"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Listrik]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="658" y="0" width="94" height="20" uuid="7a2a612a-9748-4828-8670-4291aa044a7c"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Sumber Air]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement x="376" y="0" width="94" height="20" uuid="c92182a1-0508-40b2-b519-f9947539aa3e"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{tipe_rumah_Kamar_Tidur}]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0">
+				<reportElement x="94" y="0" width="94" height="20" uuid="1b37d165-5fe5-4854-b35e-d1aa9c64eedf"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{tipe_rumah_Luas_Tanah}]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0">
+				<reportElement x="188" y="0" width="94" height="20" uuid="59cf418e-9fa6-443c-ac3b-780a05e4c1fc"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{tipe_rumah_Luas_Bangunan}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="0" width="94" height="20" uuid="020fa869-0484-4258-b581-bf9935610b82"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{tipe_rumah_Tipe}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="282" y="0" width="94" height="20" uuid="3b832811-6ef2-49f6-a4e9-fa74f18d6a93"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{tipe_rumah_Kamar_Mandi}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="470" y="0" width="94" height="20" uuid="6c3b3e48-8afc-44a9-b8a2-b4aeeeae70ce"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{tipe_rumah_Lantai}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="564" y="0" width="94" height="20" uuid="b1d80479-85b0-4558-a7a3-8e67d6a17a58"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{tipe_rumah_Listrik}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="658" y="0" width="94" height="20" uuid="bbb9aee2-f83e-461c-9810-f367403e0598"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{tipe_rumah_Sumber_Air}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="47" splitType="Stretch">
+			<textField pattern="¤ #,##0">
+				<reportElement x="617" y="25" width="135" height="20" uuid="f3a5e20b-cb60-49b5-8d56-912cae580e31"/>
+				<textElement textAlignment="Right">
+					<font size="12" isBold="true" isItalic="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{transaksi_harga_rumah}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="560" y="25" width="57" height="20" uuid="ba0b41d8-08da-43f8-937f-e8634867be62"/>
+				<textElement textAlignment="Right">
+					<font size="12" isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[Harga :]]></text>
+			</staticText>
+		</band>
+	</columnFooter>
+	<pageFooter>
+		<band height="67" splitType="Stretch">
+			<staticText>
+				<reportElement x="652" y="0" width="100" height="20" uuid="4ad6a3f6-2a4c-4115-8101-b63de2ac2e02"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Tertanda]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="652" y="47" width="100" height="20" uuid="20045e4d-0647-4bfa-b9a6-88d8f57ecc48"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{karyawan_Nama_Karyawan}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="74" splitType="Stretch"/>
+	</summary>
+</jasperReport>
