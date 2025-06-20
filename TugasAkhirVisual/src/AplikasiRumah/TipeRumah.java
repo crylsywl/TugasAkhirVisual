@@ -79,7 +79,7 @@ public class TipeRumah extends javax.swing.JFrame {
             "Listrik",
             "Sumber Air",
             "Harga Rumah",
-            "Deskripsi",
+            "Alamat",
             "Total Bonus"
         };
 
@@ -335,6 +335,7 @@ public class TipeRumah extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        displayArea.setAutoResizeMode(0);
         displayArea.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 displayAreaMouseClicked(evt);

@@ -164,7 +164,6 @@ private void simpanDataTransaksi() {
         tipeLabel = new javax.swing.JLabel();
         airLabel = new javax.swing.JLabel();
         hargaLabel = new javax.swing.JLabel();
-        deskripsiLabel = new javax.swing.JLabel();
         idKaryawanLabel = new javax.swing.JLabel();
         namaKaryawanLabel = new javax.swing.JLabel();
         simpanButton = new javax.swing.JLabel();
@@ -172,6 +171,8 @@ private void simpanDataTransaksi() {
         cariRumahButton = new javax.swing.JLabel();
         cariClientButton = new javax.swing.JLabel();
         back = new javax.swing.JLabel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        deskripsiLabel = new javax.swing.JTextArea();
         jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -225,9 +226,6 @@ private void simpanDataTransaksi() {
         hargaLabel.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
         getContentPane().add(hargaLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 476, 240, 20));
 
-        deskripsiLabel.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        getContentPane().add(deskripsiLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(439, 376, 160, -1));
-
         idKaryawanLabel.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         getContentPane().add(idKaryawanLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(720, 194, 130, -1));
 
@@ -273,6 +271,22 @@ private void simpanDataTransaksi() {
             }
         });
         getContentPane().add(back, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 40, 30, 30));
+
+        jScrollPane2.setBorder(null);
+        jScrollPane2.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        jScrollPane2.setHorizontalScrollBar(null);
+
+        deskripsiLabel.setEditable(false);
+        deskripsiLabel.setBackground(new java.awt.Color(210, 240, 255));
+        deskripsiLabel.setColumns(20);
+        deskripsiLabel.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        deskripsiLabel.setLineWrap(true);
+        deskripsiLabel.setRows(3);
+        deskripsiLabel.setBorder(null);
+        deskripsiLabel.setMaximumSize(new java.awt.Dimension(165, 90));
+        jScrollPane2.setViewportView(deskripsiLabel);
+
+        getContentPane().add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 380, 165, 80));
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/Penjualan Rumah.jpg"))); // NOI18N
         getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 900, 550));
@@ -408,11 +422,12 @@ private void simpanDataTransaksi() {
     private javax.swing.JLabel cariKaryawanButton;
     private javax.swing.JLabel cariRumahButton;
     private javax.swing.JLabel clientLabel;
-    private javax.swing.JLabel deskripsiLabel;
+    private javax.swing.JTextArea deskripsiLabel;
     private javax.swing.JLabel gajiLabel;
     private javax.swing.JLabel hargaLabel;
     private javax.swing.JLabel idKaryawanLabel;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JLabel kamarMLabel;
     private javax.swing.JLabel kamarTLabel;
     private javax.swing.JLabel kkLabel;

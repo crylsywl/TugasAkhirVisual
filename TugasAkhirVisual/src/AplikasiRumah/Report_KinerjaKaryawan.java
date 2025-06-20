@@ -1,0 +1,306 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package AplikasiRumah;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.Calendar;
+import java.util.Vector;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+/**
+ *
+ * @author Asus
+ */
+public class Report_KinerjaKaryawan extends javax.swing.JFrame {
+    private DefaultTableModel tableModel;
+    private Connection conn;
+    /**
+     * Creates new form Report_RancanganAnggaranBiaya
+     */
+    public Report_KinerjaKaryawan() {
+        initComponents();
+        conn = new koneksi().getConnection();
+        initTable();
+        loadTahunComboBox();
+        loadAllData();
+    }
+    
+    private void initTable() {
+        tableModel = new DefaultTableModel(
+            new Object[]{"ID Karyawan", "Nama Karyawan", "Jumlah Rumah Terjual"}, 
+            0
+        ) {
+            @Override
+            public Class<?> getColumnClass(int columnIndex) {
+                if (columnIndex == 2) return Integer.class;
+                return String.class;
+            }
+        };
+        table.setModel(tableModel);
+    }
+    
+    private void loadTahunComboBox() {
+        try {
+            // Ambil tahun unik dari tabel transaksi
+            String sql = "SELECT DISTINCT YEAR(timestamp) as tahun FROM transaksi ORDER BY tahun DESC";
+            PreparedStatement pst = conn.prepareStatement(sql);
+            ResultSet rs = pst.executeQuery();
+            
+            Vector<String> tahunList = new Vector<>();
+            tahunList.add("Semua Tahun"); // Opsi untuk menampilkan semua
+            
+            while (rs.next()) {
+                tahunList.add(rs.getString("tahun"));
+            }
+            
+            // Jika tidak ada data, tambahkan tahun saat ini
+            if (tahunList.size() == 1) {
+                tahunList.add(String.valueOf(Calendar.getInstance().get(Calendar.YEAR)));
+            }
+            
+            comboBoxTahun.setModel(new DefaultComboBoxModel<>(tahunList));
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, 
+                "Error memuat daftar tahun: " + e.getMessage(),
+                "Database Error",
+                JOptionPane.ERROR_MESSAGE);
+        }
+    }
+     
+    private void loadAllData() {
+        loadData(null);
+    }
+    
+    private void loadData(String tahun) {
+        tableModel.setRowCount(0); // Clear existing data
+        
+        String sql = "SELECT k.`Id Karyawan`, k.`Nama Karyawan`, " +
+                     "COUNT(t.id) as rumah_terjual " +
+                     "FROM karyawan k " +
+                     "LEFT JOIN transaksi t ON k.`Id Karyawan` = t.karyawan_id ";
+        
+        if (tahun != null && !tahun.equals("Semua Tahun")) {
+            sql += "WHERE YEAR(t.timestamp) = ? ";
+        }
+        
+        sql += "GROUP BY k.`Id Karyawan`, k.`Nama Karyawan`" +
+               "ORDER BY rumah_terjual DESC";
+        
+        try (PreparedStatement pst = conn.prepareStatement(sql)) {
+            if (tahun != null && !tahun.equals("Semua Tahun")) {
+                pst.setString(1, tahun);
+            }
+            
+            ResultSet rs = pst.executeQuery();
+            
+            while (rs.next()) {
+                tableModel.addRow(new Object[]{
+                    rs.getString("Id Karyawan"),
+                    rs.getString("Nama Karyawan"),
+                    rs.getInt("rumah_terjual")
+                });
+            }
+            
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, 
+                "Error memuat data kinerja karyawan: " + e.getMessage(),
+                "Database Error",
+                JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
+    private void printSelectedTransaction() {
+            // Ambil tahun yang dipilih dari comboBox
+    String selectedYear = (String) comboBoxTahun.getSelectedItem();
+    
+    // Validasi jika memilih "Semua Tahun" atau tahun tertentu
+    if (selectedYear.equals("Semua Tahun")) {
+        selectedYear = null; // Akan menampilkan semua tahun dalam laporan
+    }
+    
+    try {
+        // Panggil kelas report dengan parameter tahun
+        new ReportKinerjaKaryawan().printKinerjaByYear(selectedYear);
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(this, 
+            "Gagal mencetak laporan:\n" + e.getMessage(), 
+            "Error", 
+            JOptionPane.ERROR_MESSAGE);
+        e.printStackTrace();
+    }
+    }
+
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
+     */
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+
+        jScrollPane1 = new javax.swing.JScrollPane();
+        table = new javax.swing.JTable();
+        btnRefresh = new javax.swing.JLabel();
+        btnRefresh1 = new javax.swing.JLabel();
+        btnShowAll = new javax.swing.JLabel();
+        back = new javax.swing.JLabel();
+        comboBoxTahun = new javax.swing.JComboBox<>();
+        lblTotalHarga = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        table.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        table.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tableMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(table);
+
+        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 290, 780, 130));
+
+        btnRefresh.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnRefresh.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnRefreshMouseClicked(evt);
+            }
+        });
+        getContentPane().add(btnRefresh, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 185, 180, 26));
+
+        btnRefresh1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnRefresh1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnRefresh1MouseClicked(evt);
+            }
+        });
+        getContentPane().add(btnRefresh1, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 485, 180, 26));
+
+        btnShowAll.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnShowAll.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnShowAllMouseClicked(evt);
+            }
+        });
+        getContentPane().add(btnShowAll, new org.netbeans.lib.awtextra.AbsoluteConstraints(815, 250, 26, 26));
+
+        back.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        back.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                backMouseClicked(evt);
+            }
+        });
+        getContentPane().add(back, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 40, 30, 30));
+
+        comboBoxTahun.setBackground(new java.awt.Color(229, 245, 255));
+        comboBoxTahun.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        comboBoxTahun.setBorder(null);
+        getContentPane().add(comboBoxTahun, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 140, 140, -1));
+        getContentPane().add(lblTotalHarga, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 428, 140, 20));
+
+        jLabel2.setText("Total :");
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 430, -1, -1));
+
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/Rancangan Anggaran Biaya.jpg"))); // NOI18N
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 900, 550));
+
+        pack();
+    }// </editor-fold>//GEN-END:initComponents
+
+    private void tableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableMouseClicked
+        // TODO add your handling code here:
+        // Get selected row
+    }//GEN-LAST:event_tableMouseClicked
+
+    private void btnRefreshMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnRefreshMouseClicked
+        String selectedTipe = (String) comboBoxTahun.getSelectedItem();
+        loadData(selectedTipe); // Akan otomatis update total harga
+    }//GEN-LAST:event_btnRefreshMouseClicked
+
+    private void btnRefresh1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnRefresh1MouseClicked
+        // TODO add your handling code here:
+        printSelectedTransaction();
+    }//GEN-LAST:event_btnRefresh1MouseClicked
+
+    private void btnShowAllMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnShowAllMouseClicked
+        // TODO add your handling code here:
+        loadAllData();
+            comboBoxTahun.setSelectedIndex(0); // Reset ke "Semua Tipe"
+    }//GEN-LAST:event_btnShowAllMouseClicked
+
+    private void backMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_backMouseClicked
+        // TODO add your handling code here:
+        Laporan LAPORANPAGE = new Laporan();
+        LAPORANPAGE.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_backMouseClicked
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String args[]) {
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(Report_KinerjaKaryawan.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(Report_KinerjaKaryawan.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(Report_KinerjaKaryawan.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(Report_KinerjaKaryawan.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        //</editor-fold>
+        //</editor-fold>
+
+        /* Create and display the form */
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new Report_KinerjaKaryawan().setVisible(true);
+            }
+        });
+    }
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel back;
+    private javax.swing.JLabel btnRefresh;
+    private javax.swing.JLabel btnRefresh1;
+    private javax.swing.JLabel btnShowAll;
+    private javax.swing.JComboBox<String> comboBoxTahun;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel lblTotalHarga;
+    private javax.swing.JTable table;
+    // End of variables declaration//GEN-END:variables
+}

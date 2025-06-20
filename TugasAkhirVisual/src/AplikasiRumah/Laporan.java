@@ -166,13 +166,16 @@ public class Laporan extends javax.swing.JFrame {
 
     private void jLabel7MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel7MouseClicked
         // TODO add your handling code here:
-        Client CLIENTPAGE = new Client();
-        CLIENTPAGE.setVisible(true);
+        Report_KinerjaKaryawan REPORT_KINERJAKARYAWAN = new Report_KinerjaKaryawan();
+        REPORT_KINERJAKARYAWAN.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jLabel7MouseClicked
 
     private void jLabel8MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel8MouseClicked
         // TODO add your handling code here:
+        Report_RancanganAnggaranBiaya REPORT_RANCANGANANGGARANBIAYA = new Report_RancanganAnggaranBiaya();
+        REPORT_RANCANGANANGGARANBIAYA.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_jLabel8MouseClicked
 
     /**

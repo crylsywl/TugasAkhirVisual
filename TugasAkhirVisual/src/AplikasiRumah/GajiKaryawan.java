@@ -14,6 +14,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Calendar;
 
 
 /**
@@ -69,8 +70,8 @@ public class GajiKaryawan extends javax.swing.JFrame {
         bonusLabel = new javax.swing.JLabel();
         rumahTerjualLabel = new javax.swing.JLabel();
         totalGajiLabel = new javax.swing.JLabel();
-        jLabel1 = new javax.swing.JLabel();
         simpan1 = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -141,6 +142,13 @@ public class GajiKaryawan extends javax.swing.JFrame {
         totalGajiLabel.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         getContentPane().add(totalGajiLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 266, 200, 20));
 
+        simpan1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                simpan1MouseClicked(evt);
+            }
+        });
+        getContentPane().add(simpan1, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 490, 250, 20));
+
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/Gaji Karyawan.jpg"))); // NOI18N
         jLabel1.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -148,13 +156,6 @@ public class GajiKaryawan extends javax.swing.JFrame {
             }
         });
         getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 900, 550));
-
-        simpan1.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                simpan1MouseClicked(evt);
-            }
-        });
-        getContentPane().add(simpan1, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 490, 250, 20));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -247,55 +248,64 @@ public class GajiKaryawan extends javax.swing.JFrame {
     }//GEN-LAST:event_buttonsearchMouseClicked
 
     private void buttonsearch1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_buttonsearch1MouseClicked
-     // Panggil popup jabatan
-        new Popupdatajabatan(new Popupdatajabatan.KaryawanSelectionListener() {
-            @Override
-            public void onKaryawanSelected(String idJabatan, String namaJabatan, int gajiPokok) {
-                // Simpan ID jabatan secara internal
-                currentIdJabatan = idJabatan;
-                
-                // Tampilkan hanya nama jabatan dan gaji pokok
-                jabatan.setText(namaJabatan);
-                gajiPokokLabel.setText(formatToRupiah(gajiPokok));
-                gajiPokokJabatan.setText(formatToRupiah(gajiPokok));
-                
-                // Lanjutkan dengan pencarian transaksi
-                String idKaryawan = idLabel.getText();
-                
-                if (idKaryawan.isEmpty()) {
-                    JOptionPane.showMessageDialog(GajiKaryawan.this, "Masukkan ID Karyawan terlebih dahulu.");
-                    return;
-                }
-
-                try (Connection connection = koneksi.getConnection()) {
-                    String transaksiQuery = "SELECT COUNT(*) as rumah_terjual, COALESCE(SUM(total_bonus), 0) as total_bonus " +
-                                          "FROM transaksi " +
-                                          "WHERE karyawan_id = ?";
-
-                    PreparedStatement transaksiStatement = connection.prepareStatement(transaksiQuery);
-                    transaksiStatement.setString(1, idKaryawan);
-                    ResultSet transaksiResult = transaksiStatement.executeQuery();
-
-                    double totalBonus = 0;
-                    int rumahTerjual = 0;
-                    if (transaksiResult.next()) {
-                        rumahTerjual = transaksiResult.getInt("rumah_terjual");
-                        totalBonus = transaksiResult.getDouble("total_bonus");
-                    }
-
-                    bonusLabel.setText(formatToRupiah(totalBonus));
-                    rumahTerjualLabel.setText(String.valueOf(rumahTerjual));
-
-                    double totalGaji = gajiPokok + totalBonus;
-                    totalGajiLabel.setText(formatToRupiah(totalGaji));
-
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                    JOptionPane.showMessageDialog(GajiKaryawan.this, 
-                        "Terjadi kesalahan saat mencari data: " + e.getMessage());
-                }
+        // Panggil popup jabatan
+    new Popupdatajabatan(new Popupdatajabatan.KaryawanSelectionListener() {
+        @Override
+        public void onKaryawanSelected(String idJabatan, String namaJabatan, int gajiPokok) {
+            // Simpan ID jabatan secara internal
+            currentIdJabatan = idJabatan;
+            
+            // Tampilkan hanya nama jabatan dan gaji pokok
+            jabatan.setText(namaJabatan);
+            gajiPokokLabel.setText(formatToRupiah(gajiPokok));
+            gajiPokokJabatan.setText(formatToRupiah(gajiPokok));
+            
+            // Lanjutkan dengan pencarian transaksi
+            String idKaryawan = idLabel.getText();
+            
+            if (idKaryawan.isEmpty()) {
+                JOptionPane.showMessageDialog(GajiKaryawan.this, "Masukkan ID Karyawan terlebih dahulu.");
+                return;
             }
-        }).setVisible(true);
+
+            try (Connection connection = koneksi.getConnection()) {
+                // Dapatkan bulan dan tahun saat ini
+                Calendar cal = Calendar.getInstance();
+                int currentMonth = cal.get(Calendar.MONTH) + 1; // Bulan dimulai dari 0
+                int currentYear = cal.get(Calendar.YEAR);
+                
+                String transaksiQuery = "SELECT COUNT(*) as rumah_terjual, COALESCE(SUM(total_bonus), 0) as total_bonus " +
+                                    "FROM transaksi " +
+                                    "WHERE karyawan_id = ? " +
+                                    "AND MONTH(timestamp) = ? " +  // Filter bulan
+                                    "AND YEAR(timestamp) = ?";     // Filter tahun
+
+                PreparedStatement transaksiStatement = connection.prepareStatement(transaksiQuery);
+                transaksiStatement.setString(1, idKaryawan);
+                transaksiStatement.setInt(2, currentMonth);
+                transaksiStatement.setInt(3, currentYear);
+                ResultSet transaksiResult = transaksiStatement.executeQuery();
+
+                double totalBonus = 0;
+                int rumahTerjual = 0;
+                if (transaksiResult.next()) {
+                    rumahTerjual = transaksiResult.getInt("rumah_terjual");
+                    totalBonus = transaksiResult.getDouble("total_bonus");
+                }
+
+                bonusLabel.setText(formatToRupiah(totalBonus));
+                rumahTerjualLabel.setText(String.valueOf(rumahTerjual));
+
+                double totalGaji = gajiPokok + totalBonus;
+                totalGajiLabel.setText(formatToRupiah(totalGaji));
+
+            } catch (SQLException e) {
+                e.printStackTrace();
+                JOptionPane.showMessageDialog(GajiKaryawan.this, 
+                    "Terjadi kesalahan saat mencari data: " + e.getMessage());
+            }
+        }
+    }).setVisible(true);
     }//GEN-LAST:event_buttonsearch1MouseClicked
 
     private String formatToRupiah(double nominal) {

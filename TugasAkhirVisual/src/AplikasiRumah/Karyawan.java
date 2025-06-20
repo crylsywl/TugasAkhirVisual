@@ -418,9 +418,9 @@ public class Karyawan extends javax.swing.JFrame {
             return;
         }
         
-        int id;
+        String id;
         try {
-            id = Integer.parseInt(idText);
+            id = idText;
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(this, "ID Karyawan harus berupa angka.", "Input Error", JOptionPane.ERROR_MESSAGE);
             idField.requestFocus();
@@ -435,7 +435,7 @@ public class Karyawan extends javax.swing.JFrame {
         String query = "DELETE FROM karyawan WHERE `Id Karyawan` = ?";
         try (Connection connection = koneksi.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-            preparedStatement.setInt(1, id);
+            preparedStatement.setString(1, id);
             int rowsAffected = preparedStatement.executeUpdate();
             if (rowsAffected > 0) {
                  JOptionPane.showMessageDialog(this, "Data karyawan berhasil dihapus.");

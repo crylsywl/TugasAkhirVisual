@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" language="groovy" pageWidth="792" pageHeight="325" orientation="Landscape" columnWidth="752" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="1755951a-9f96-42fa-9cfc-cc0a4829bee6">
-	<property name="ireport.zoom" value="1.6105100000000048"/>
-	<property name="ireport.x" value="266"/>
-	<property name="ireport.y" value="163"/>
+	<property name="ireport.zoom" value="1.1000000000000036"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
 	<parameter name="id_transaksi" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[SELECT
