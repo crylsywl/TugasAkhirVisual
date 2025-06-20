@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" language="groovy" pageWidth="792" pageHeight="325" orientation="Landscape" columnWidth="752" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="1755951a-9f96-42fa-9cfc-cc0a4829bee6">
-	<property name="ireport.zoom" value="1.6105100000000048"/>
-	<property name="ireport.x" value="266"/>
-	<property name="ireport.y" value="163"/>
+	<property name="ireport.zoom" value="1.1000000000000032"/>
+	<property name="ireport.x" value="81"/>
+	<property name="ireport.y" value="0"/>
 	<parameter name="id_transaksi" class="java.lang.String"/>
+	<parameter name="parameter1" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[SELECT
      transaksi.`id` AS transaksi_id,
@@ -331,7 +332,7 @@ transaksi.id=$P{id_transaksi}]]>
 	<pageFooter>
 		<band height="67" splitType="Stretch">
 			<staticText>
-				<reportElement x="652" y="0" width="100" height="20" uuid="4ad6a3f6-2a4c-4115-8101-b63de2ac2e02"/>
+				<reportElement x="658" y="0" width="100" height="20" uuid="4ad6a3f6-2a4c-4115-8101-b63de2ac2e02"/>
 				<textElement textAlignment="Center"/>
 				<text><![CDATA[Tertanda]]></text>
 			</staticText>

@@ -139,6 +139,27 @@ class NumberRenderer extends DefaultTableCellRenderer {
             JOptionPane.ERROR_MESSAGE);
     }
 }
+        private void printSelectedTransaction() {
+        int selectedRow = table.getSelectedRow();
+        if (selectedRow == -1) {
+            JOptionPane.showMessageDialog(this, 
+                "Pilih transaksi yang akan dicetak terlebih dahulu", 
+                "Peringatan", 
+                JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        
+        try {
+            int idGaji = (Integer) table.getValueAt(selectedRow, 0);
+            new ReportGajiKaryawan().printGajiById(idGaji);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, 
+                "Gagal mencetak laporan:\n" + e.getMessage(), 
+                "Error", 
+                JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
+        }
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -271,7 +292,7 @@ class NumberRenderer extends DefaultTableCellRenderer {
     }//GEN-LAST:event_btnRefreshMouseClicked
 
     private void btnRefresh1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnRefresh1MouseClicked
-        // TODO add your handling code here:
+        printSelectedTransaction();        // TODO add your handling code here:
     }//GEN-LAST:event_btnRefresh1MouseClicked
 
     /**
